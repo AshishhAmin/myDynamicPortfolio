@@ -79,7 +79,7 @@ function App() {
 
     return (
         <BrowserRouter>
-            <CustomCursor />
+            {/* <CustomCursor /> */}
             <AnimatedRoutes isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
         </BrowserRouter>
     );
