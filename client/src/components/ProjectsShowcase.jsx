@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Github, ExternalLink, ArrowRight, ChevronLeft, ChevronRight, Terminal, Blocks, Cpu, Database, Eye } from 'lucide-react';
+import { Github, ExternalLink, ArrowRight, ChevronLeft, ChevronRight, Terminal, Blocks, Cpu, Database, Eye, Info } from 'lucide-react';
 import { API_URL } from '../config';
 import { useNavigate } from 'react-router-dom';
 import { FadeUp } from './MotionPrimitives';

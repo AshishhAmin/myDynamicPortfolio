@@ -31,7 +31,7 @@ const HeroSection = () => {
             className="relative min-h-[100dvh] flex flex-col items-center justify-center text-center px-6 pt-24 pb-12 overflow-hidden scroll-mt-32"
         >
             {/* 3D Background */}
-            {/* <InteractiveHero3D /> */}
+            <InteractiveHero3D />
             <div className="relative z-10 w-full max-w-7xl mx-auto px-6 pt-32 pb-20">
                 {/* Bottom-left descriptor — like the reference */}
                 <motion.div

@@ -44,16 +44,32 @@ const ExperiencePage = ({ isAdmin, setIsAdmin }) => (
     </>
 );
 
+const PageTransition = ({ children }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -20 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        className="w-full h-full"
+    >
+        {children}
+    </motion.div>
+);
+
 const AnimatedRoutes = ({ isAdmin, setIsAdmin }) => {
+    const location = useLocation();
+
     return (
-        <Routes>
-            <Route path="/" element={<LandingPage isAdmin={isAdmin} setIsAdmin={setIsAdmin} />} />
-            <Route path="/experience" element={<ExperiencePage isAdmin={isAdmin} setIsAdmin={setIsAdmin} />} />
-            <Route path="/project/:id" element={<ProjectDetail />} />
-            <Route path="/blog" element={<BlogList />} />
-            <Route path="/blog/:id" element={<BlogPost />} />
-            <Route path="/admin" element={<AdminDashboard />} />
-        </Routes>
+        <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+                <Route path="/" element={<PageTransition><LandingPage isAdmin={isAdmin} setIsAdmin={setIsAdmin} /></PageTransition>} />
+                <Route path="/experience" element={<PageTransition><ExperiencePage isAdmin={isAdmin} setIsAdmin={setIsAdmin} /></PageTransition>} />
+                <Route path="/project/:id" element={<PageTransition><ProjectDetail /></PageTransition>} />
+                <Route path="/blog" element={<PageTransition><BlogList /></PageTransition>} />
+                <Route path="/blog/:id" element={<PageTransition><BlogPost /></PageTransition>} />
+                <Route path="/admin" element={<PageTransition><AdminDashboard /></PageTransition>} />
+            </Routes>
+        </AnimatePresence>
     );
 };
 
@@ -63,10 +79,7 @@ function App() {
 
     return (
         <BrowserRouter>
-            <div style={{ position: 'fixed', top: 0, left: 0, zIndex: 9999, background: 'red', color: 'white', fontSize: '10px', padding: '2px' }}>
-                [DIAGNOSTIC MODE ACTIVE]
-            </div>
-            {/* <CustomCursor /> */}
+            <CustomCursor />
             <AnimatedRoutes isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
         </BrowserRouter>
     );
