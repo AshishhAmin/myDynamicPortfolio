@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { FadeUp } from './MotionPrimitives';
+import { API_URL } from '../config';
 
 const SKILL_GROUPS = [
     {
@@ -21,7 +22,7 @@ const SkillsSection = () => {
     const [skillGroups, setSkillGroups] = React.useState(SKILL_GROUPS);
 
     React.useEffect(() => {
-        fetch('http://localhost:5000/api/skills')
+        fetch(`${API_URL}/api/skills`)
             .then(res => res.json())
             .then(data => {
                 if (data && data.length > 0) {

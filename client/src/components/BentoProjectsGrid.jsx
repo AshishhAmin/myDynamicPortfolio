@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import { API_URL } from '../config';
 import { useNavigate } from 'react-router-dom';
 
 const placeholderProjects = [
@@ -39,7 +40,7 @@ const BentoProjectsGrid = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/projects')
+        fetch(`${API_URL}/api/projects`)
             .then(res => res.json())
             .then(data => {
                 if (data && data.length > 0) setProjects(data);

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, FileText } from 'lucide-react';
+import { API_URL } from '../config';
 import { Link, useNavigate } from 'react-router-dom';
 import { FadeUp } from './MotionPrimitives';
 
@@ -11,7 +12,7 @@ const BlogSection = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetch('http://localhost:5000/api/blogs')
+        fetch(`${API_URL}/api/blogs`)
             .then(res => res.json())
             .then(data => {
                 // Only take the first 3 for the preview on home screen

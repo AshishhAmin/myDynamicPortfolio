@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, ChevronLeft, ChevronRight, Info } from 'lucide-react';
+import { Github, ExternalLink, ArrowRight, ChevronLeft, ChevronRight, Terminal, Blocks, Cpu, Database, Eye } from 'lucide-react';
+import { API_URL } from '../config';
 import { useNavigate } from 'react-router-dom';
 import { FadeUp } from './MotionPrimitives';
 
@@ -49,7 +50,7 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/projects')
+        fetch(`${API_URL}/api/projects`)
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) setDbProjects(data);

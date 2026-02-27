@@ -3,6 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
+import { API_URL } from '../config';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
@@ -19,7 +20,7 @@ export default function BlogPost() {
     useEffect(() => {
         setLoading(true);
         setFetchError(null);
-        fetch(`http://localhost:5000/api/blogs/${id}`)
+        fetch(`${API_URL}/api/blogs/${id}`)
             .then(res => {
                 if (!res.ok) throw new Error(res.status === 404 ? 'Article Not Found' : 'Server Error');
                 return res.json();

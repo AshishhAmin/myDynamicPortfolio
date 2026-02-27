@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../config';
 import { ArrowLeft, LayoutGrid, User, Briefcase, Wrench, Mail, Lock } from 'lucide-react';
 import AdminProjectForm from '../components/AdminProjectForm';
 import AboutForm from '../components/AdminForms/AboutForm';
@@ -36,7 +37,7 @@ export default function AdminDashboard() {
         e.preventDefault();
         setIsLoggingIn(true);
         try {
-            const res = await fetch('http://localhost:5000/api/login', {
+            const res = await fetch(`${API_URL}/api/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ password }),

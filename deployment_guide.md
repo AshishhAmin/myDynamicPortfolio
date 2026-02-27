@@ -41,7 +41,9 @@ Vercel is the best for React/Vite apps.
     *   **Framework Preset**: `Vite`
     *   **Root Directory**: `client`
 3.  **Environment Variables**:
-    *   None needed initially, but you should update all `fetch` URLs in your client code from `http://localhost:5000` to your **Render URL** (e.g., `https://my-api.onrender.com`).
+    *   Click "Add Environment Variable" and add:
+        *   `VITE_API_URL`: Paste your **Render URL** (e.g., `https://my-api.onrender.com`).
+    *   *I have automated the code so this single setting will update all 18 files on your site automatically!*
 
 ## 4. Security Checklist ✅
 - [ ] **Change the Password**: Make sure `ADMIN_PASSWORD` in Render is NOT `admin123`.

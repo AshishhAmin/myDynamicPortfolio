@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft, ExternalLink, Github, Terminal, Code2, Cpu } from 'lucide-react';
+import { API_URL } from '../config';
 import AnimatedBackground from '../components/AnimatedBackground';
 import Footer from '../components/Footer';
 
@@ -15,7 +16,7 @@ export default function ProjectDetail() {
     useEffect(() => {
         setLoading(true);
         setFetchError(null);
-        fetch(`http://localhost:5000/api/project-item/${id}`)
+        fetch(`${API_URL}/api/project-item/${id}`)
             .then(res => {
                 if (!res.ok) throw new Error(res.status === 404 ? 'Project Not Found' : 'Server Error');
                 return res.json();

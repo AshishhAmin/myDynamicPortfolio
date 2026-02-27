@@ -1,6 +1,7 @@
 import React from 'react';
 import { FadeUp } from './MotionPrimitives';
 import { Github, Linkedin, Mail, Instagram } from 'lucide-react';
+import { API_URL } from '../config';
 
 const socials = [
     { Icon: Github, href: '#', label: 'GitHub' },
@@ -30,7 +31,7 @@ const Footer = () => {
     });
 
     React.useEffect(() => {
-        fetch('http://localhost:5000/api/contact')
+        fetch(`${API_URL}/api/contact`)
             .then(res => res.json())
             .then(data => {
                 if (data.email) {

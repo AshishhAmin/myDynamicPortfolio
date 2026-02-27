@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight, FileText } from 'lucide-react';
+import { API_URL } from '../config';
 import { Link, useNavigate } from 'react-router-dom';
 import AnimatedBackground from '../components/AnimatedBackground';
 import Footer from '../components/Footer';
@@ -12,7 +13,7 @@ export default function BlogList() {
 
     useEffect(() => {
         setLoading(true);
-        fetch('http://localhost:5000/api/blogs')
+        fetch(`${API_URL}/api/blogs`)
             .then(res => res.json())
             .then(data => {
                 setBlogs(Array.isArray(data) ? data : []);

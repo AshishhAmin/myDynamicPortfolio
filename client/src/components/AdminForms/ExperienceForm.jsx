@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_URL } from '../../config';
 import { Briefcase, GraduationCap, Pencil, Trash2, Plus, X, Check } from 'lucide-react';
 
 const EMPTY_FORM = { type: 'experience', title: '', organization: '', period: '', description: '' };
@@ -11,7 +12,7 @@ export default function ExperienceForm() {
     const [msg, setMsg] = useState('');
 
     const fetchItems = () => {
-        fetch('http://localhost:5000/api/experience')
+        fetch(`${API_URL}/api/experience`)
             .then(r => r.json())
             .then(setItems)
             .catch(console.error);
@@ -27,8 +28,8 @@ export default function ExperienceForm() {
         e.preventDefault();
         setLoading(true);
         const url = editingId
-            ? `http://localhost:5000/api/experience/${editingId}`
-            : 'http://localhost:5000/api/experience';
+            ? `${API_URL}/api/experience/${editingId}`
+            : `${API_URL}/api/experience`;
         const method = editingId ? 'PUT' : 'POST';
         try {
             await fetch(url, {
@@ -54,7 +55,7 @@ export default function ExperienceForm() {
 
     const handleDelete = async (id) => {
         if (!confirm('Delete this entry?')) return;
-        await fetch(`http://localhost:5000/api/experience/${id}`, {
+        await fetch(`${API_URL}/api/experience/${id}`, {
             method: 'DELETE',
             headers: {
                 'x-admin-token': sessionStorage.getItem('adminToken')

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { API_URL } from '../../config';
 
 export default function AboutForm() {
     const [description, setDescription] = useState('');
     const [isSaving, setSaving] = useState(false);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/about')
+        fetch(`${API_URL}/api/about`)
             .then(res => res.json())
             .then(data => setDescription(data.description || ''))
             .catch(err => console.error('Fetch error:', err));
@@ -15,7 +16,7 @@ export default function AboutForm() {
         e.preventDefault();
         setSaving(true);
         try {
-            const res = await fetch('http://localhost:5000/api/about', {
+            const res = await fetch(`${API_URL}/api/about`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Github, Star, Circle, GitBranch, ArrowUpRight } from 'lucide-react';
+import { API_URL } from '../config';
 import { FadeUp } from './MotionPrimitives';
 
 const GithubPulse = () => {
@@ -9,7 +10,7 @@ const GithubPulse = () => {
 
     useEffect(() => {
         setLoading(true);
-        fetch('http://localhost:5000/api/github')
+        fetch(`${API_URL}/api/github`)
             .then(res => res.json())
             .then(data => {
                 if (Array.isArray(data)) {

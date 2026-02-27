@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_URL } from '../config';
 import { Plus, Edit2, Trash2, Globe, Lock, Code2, Link, Image as ImageIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -18,7 +19,7 @@ export default function AdminBlogForm() {
 
     const fetchBlogs = async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/blogs/all');
+            const res = await fetch(`${API_URL}/api/blogs/all`);
             const data = await res.json();
             setBlogs(data);
         } catch (err) {
@@ -52,7 +53,7 @@ export default function AdminBlogForm() {
             payload.append('existing_cover_image', formData.cover_image);
         }
 
-        const url = isEditing ? `http://localhost:5000/api/blogs/${editId}` : 'http://localhost:5000/api/blogs';
+        const url = isEditing ? `${API_URL}/api/blogs/${editId}` : `${API_URL}/api/blogs`;
         const method = isEditing ? 'PUT' : 'POST';
 
         try {
@@ -96,7 +97,7 @@ export default function AdminBlogForm() {
     const handleDelete = async (id) => {
         if (!confirm('Delete this blog post?')) return;
         try {
-            const res = await fetch(`http://localhost:5000/api/blogs/${id}`, {
+            const res = await fetch(`${API_URL}/api/blogs/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'x-admin-token': sessionStorage.getItem('adminToken')

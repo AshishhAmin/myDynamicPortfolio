@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { API_URL } from '../config';
 import { StaggerParent, StaggerChild } from './MotionPrimitives';
 import InteractiveHero3D from './InteractiveHero3D';
 
@@ -7,7 +8,7 @@ const HeroSection = () => {
     const [desc, setDesc] = React.useState('');
 
     React.useEffect(() => {
-        fetch('http://localhost:5000/api/about')
+        fetch(`${API_URL}/api/about`)
             .then(res => res.json())
             .then(data => {
                 if (data.description) setDesc(data.description);

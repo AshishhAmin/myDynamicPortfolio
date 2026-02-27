@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase, GraduationCap, Calendar } from 'lucide-react';
+import { Briefcase, GraduationCap, MapPin, Calendar, ExternalLink, ArrowRight, Sparkles, ChevronRight, Download } from 'lucide-react';
+import { API_URL } from '../config';
 import { StaggerParent, StaggerChild, FadeUp } from '../components/MotionPrimitives';
 import AnimatedBackground from '../components/AnimatedBackground';
 import Footer from '../components/Footer';
@@ -89,7 +90,7 @@ const Experience = () => {
     const [timeline, setTimeline] = React.useState(TIMELINE_DATA);
 
     React.useEffect(() => {
-        fetch('http://localhost:5000/api/experience')
+        fetch(`${API_URL}/api/experience`)
             .then(res => res.json())
             .then(data => {
                 if (data && data.length > 0) {

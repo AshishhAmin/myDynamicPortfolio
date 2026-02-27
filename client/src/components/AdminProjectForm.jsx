@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { UploadCloud, Pencil, Trash2, Plus, X, Check, ExternalLink } from 'lucide-react';
+import { API_URL } from '../config';
 
 const EMPTY_FORM = { title: '', description: '', long_description: '', tech_stack: '', live_link: '', github_link: '', size: 'small' };
 
@@ -13,7 +14,7 @@ export default function AdminProjectForm() {
     const [msg, setMsg] = useState('');
 
     const fetchProjects = () => {
-        fetch('http://localhost:5000/api/projects')
+        fetch(`${API_URL}/api/projects`)
             .then(r => r.json())
             .then(setProjects)
             .catch(console.error);
@@ -34,8 +35,8 @@ export default function AdminProjectForm() {
         if (editingId && !file) data.append('existing_image_url', existingImageUrl);
 
         const url = editingId
-            ? `http://localhost:5000/api/projects/${editingId}`
-            : 'http://localhost:5000/api/projects';
+            ? `${API_URL}/api/projects/${editingId}`
+            : `${API_URL}/api/projects`;
         const method = editingId ? 'PUT' : 'POST';
 
         try {
@@ -76,7 +77,7 @@ export default function AdminProjectForm() {
 
     const handleDelete = async (id) => {
         if (!confirm('Delete this project? This cannot be undone.')) return;
-        await fetch(`http://localhost:5000/api/projects/${id}`, {
+        await fetch(`${API_URL}/api/projects/${id}`, {
             method: 'DELETE',
             headers: {
                 'x-admin-token': sessionStorage.getItem('adminToken')

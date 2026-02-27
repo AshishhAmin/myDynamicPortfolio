@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_URL } from '../../config';
 import { Pencil, Trash2, Plus, X, Check } from 'lucide-react';
 
 const EMPTY_FORM = { category: '', skillsString: '' };
@@ -11,7 +12,7 @@ export default function SkillsForm() {
     const [msg, setMsg] = useState('');
 
     const fetchItems = () => {
-        fetch('http://localhost:5000/api/skills')
+        fetch(`${API_URL}/api/skills`)
             .then(r => r.json())
             .then(setItems)
             .catch(console.error);
@@ -27,8 +28,8 @@ export default function SkillsForm() {
         e.preventDefault();
         setLoading(true);
         const url = editingId
-            ? `http://localhost:5000/api/skills/${editingId}`
-            : 'http://localhost:5000/api/skills';
+            ? `${API_URL}/api/skills/${editingId}`
+            : `${API_URL}/api/skills`;
         const method = editingId ? 'PUT' : 'POST';
         try {
             await fetch(url, {
@@ -54,7 +55,7 @@ export default function SkillsForm() {
 
     const handleDelete = async (id) => {
         if (!confirm('Delete this skill category?')) return;
-        await fetch(`http://localhost:5000/api/skills/${id}`, {
+        await fetch(`${API_URL}/api/skills/${id}`, {
             method: 'DELETE',
             headers: {
                 'x-admin-token': sessionStorage.getItem('adminToken')

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { API_URL } from '../../config';
 
 export default function ContactForm() {
     const [data, setData] = useState({
@@ -9,7 +10,7 @@ export default function ContactForm() {
     const [isSaving, setSaving] = useState(false);
 
     useEffect(() => {
-        fetch('http://localhost:5000/api/contact')
+        fetch(`${API_URL}/api/contact`)
             .then(res => res.json())
             .then(fetched => {
                 const socials = fetched.socials || [
@@ -33,7 +34,7 @@ export default function ContactForm() {
         e.preventDefault();
         setSaving(true);
         try {
-            const res = await fetch('http://localhost:5000/api/contact', {
+            const res = await fetch(`${API_URL}/api/contact`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
