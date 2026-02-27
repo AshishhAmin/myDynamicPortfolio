@@ -19,6 +19,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// Root Route for Health Check
+app.get('/', (req, res) => {
+  res.send('🚀 Portfolio API is running smoothly.');
+});
+
 // 1. Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
