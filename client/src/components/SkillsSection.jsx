@@ -41,10 +41,10 @@ const SkillsSection = () => {
         <section id="skills" className="min-h-[100dvh] flex flex-col justify-center px-6 md:px-16 lg:px-24 max-w-[1400px] w-full mx-auto pt-24 pb-12 scroll-mt-32">
             <FadeUp className="mb-16 lg:mb-24">
                 <p className="text-[11px] md:text-sm text-zinc-600 tracking-[0.3em] uppercase mb-2 lg:mb-4">Toolset</p>
-                <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight">
                     What I work with
                 </h2>
-                <p className="text-sm md:text-base lg:text-lg text-zinc-500 mt-4 lg:mt-6 max-w-lg lg:max-w-2xl leading-relaxed">
+                <p className="text-sm md:text-sm lg:text-base text-zinc-500 mt-4 lg:mt-6 max-w-lg lg:max-w-xl leading-relaxed font-light">
                     Building scalable applications with a focus on clean code,
                     high-performance logic, and pixel-perfect transitions.
                 </p>
@@ -58,7 +58,7 @@ const SkillsSection = () => {
                         whileInView={{ opacity: 1, scale: 1 }}
                         viewport={{ once: true }}
                         transition={{ delay: (idx % 15) * 0.05, duration: 0.4 }}
-                        className="px-4 py-2 md:px-5 md:py-2.5 lg:px-6 lg:py-3 rounded-xl lg:rounded-2xl border border-white/[0.05] bg-white/[0.02] text-zinc-400 hover:border-cyber-neon/50 hover:text-white hover:bg-white/[0.05] transition-all cursor-default shadow-sm text-sm md:text-base"
+                        className="px-4 py-2 md:px-4 md:py-2 lg:px-5 lg:py-2.5 rounded-xl lg:rounded-2xl border border-white/[0.05] bg-white/[0.02] text-zinc-400 hover:border-cyber-neon/50 hover:text-white hover:bg-white/[0.05] transition-all cursor-default shadow-sm text-xs md:text-sm"
                     >
                         {skill}
                     </motion.div>

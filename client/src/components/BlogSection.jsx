@@ -31,7 +31,7 @@ const BlogSection = () => {
             <FadeUp className="mb-12 lg:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
                     <p className="text-[11px] md:text-sm text-zinc-500 tracking-[0.3em] uppercase mb-2 lg:mb-4">Technical Insights</p>
-                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight">
                         Latest Writings
                     </h2>
                 </div>
@@ -70,16 +70,16 @@ const BlogSection = () => {
                                         <FileText size={48} />
                                     </div>
                                 )}
-                                <div className="p-6 lg:p-7 flex flex-col flex-1">
+                                <div className="p-6 flex flex-col flex-1">
                                     <div className="mb-4 lg:mb-5">
                                         <span className="text-[10px] md:text-xs font-mono font-black uppercase tracking-widest text-zinc-600">
                                             {new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                         </span>
                                     </div>
-                                    <h3 className="text-xl md:text-2xl font-bold text-white mb-2 lg:mb-3 group-hover:text-cyber-neon transition-colors line-clamp-2 leading-tight">
+                                    <h3 className="text-lg md:text-xl font-bold text-white mb-2 lg:mb-3 group-hover:text-cyber-neon transition-colors line-clamp-2 leading-tight">
                                         {blog.title}
                                     </h3>
-                                    <p className="text-sm md:text-base text-zinc-500 line-clamp-3 mb-6 lg:mb-8 leading-relaxed">
+                                    <p className="text-sm text-zinc-500 line-clamp-3 mb-6 lg:mb-8 leading-relaxed font-light">
                                         {blog.excerpt}
                                     </p>
                                     <div className="mt-auto flex items-center gap-2 lg:gap-3 text-xs md:text-sm font-bold uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">

@@ -74,7 +74,6 @@ const AnimatedRoutes = ({ isAdmin, setIsAdmin }) => {
 };
 
 function App() {
-    console.log('[DEBUG] App component rendering');
     const [isAdmin, setIsAdmin] = useState(false);
 
     return (

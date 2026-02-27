@@ -67,8 +67,8 @@ const TimelineNode = ({ item, index }) => {
                             <Icon size={18} />
                         </div>
                         <div>
-                            <h3 className="text-lg md:text-xl lg:text-2xl font-bold text-white tracking-tight">{item.title}</h3>
-                            <p className="text-sm md:text-base lg:text-lg text-zinc-400 font-medium">{item.organization}</p>
+                            <h3 className="text-lg md:text-lg lg:text-xl font-bold text-white tracking-tight">{item.title}</h3>
+                            <p className="text-sm md:text-sm lg:text-base text-zinc-400 font-medium">{item.organization}</p>
                         </div>
                     </div>
 
@@ -77,7 +77,7 @@ const TimelineNode = ({ item, index }) => {
                         <span>{item.period}</span>
                     </div>
 
-                    <p className="text-xs md:text-sm lg:text-base text-zinc-500 leading-relaxed max-w-lg lg:mx-auto">
+                    <p className="text-xs md:text-sm lg:text-sm text-zinc-500 leading-relaxed max-w-lg lg:mx-auto font-light">
                         {item.description}
                     </p>
                 </div>
@@ -106,10 +106,10 @@ const Experience = () => {
 
     return (
         <div id="experience" className="min-h-[100dvh] flex flex-col justify-center px-6 pt-24 pb-24 scroll-mt-32">
-            <div className="max-w-5xl lg:max-w-6xl mx-auto w-full flex flex-col h-[100dvh] max-h-[850px]">
+            <div className="max-w-5xl lg:max-w-6xl mx-auto w-full flex flex-col h-[100dvh] max-h-[750px]">
                 <FadeUp className="mb-8 md:mb-12 text-center shrink-0">
                     <p className="text-[11px] md:text-sm text-zinc-600 tracking-[0.3em] uppercase mb-4">The Journey</p>
-                    <h2 className="text-3xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tighter">
+                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tighter">
                         Experience <span className="text-zinc-600">&amp;</span> Education
                     </h2>
                 </FadeUp>

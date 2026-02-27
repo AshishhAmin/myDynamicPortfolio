@@ -111,7 +111,7 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
             </FadeUp>
 
             {/* Carousel Container */}
-            <div className="relative h-[650px] md:h-[650px] lg:h-[70vh] w-full flex items-center justify-center mt-4">
+            <div className="relative h-[600px] md:h-[600px] lg:h-[62vh] w-full flex items-center justify-center mt-4">
                 <AnimatePresence initial={false} custom={direction}>
                     <motion.div
                         key={currentIndex}
@@ -166,17 +166,17 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
                                 <span className="text-[10px] md:text-sm font-mono text-zinc-600 tracking-widest">{project.year || '2025'}</span>
                             </div>
 
-                            <h3 className="text-2xl md:text-4xl lg:text-5xl font-bold text-white mb-4 md:mb-6 leading-tight">
+                            <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 md:mb-6 leading-tight">
                                 {project.title}
                             </h3>
 
-                            <p className="text-sm md:text-base lg:text-lg text-zinc-500 leading-relaxed mb-6 md:mb-8 max-w-md lg:max-w-lg mx-auto md:mx-0">
+                            <p className="text-sm md:text-base lg:text-base text-zinc-500 leading-relaxed mb-6 md:mb-8 max-w-md lg:max-w-lg mx-auto md:mx-0 font-light">
                                 {project.description}
                             </p>
 
                             <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-6 md:mb-10">
                                 {(Array.isArray(project.tech_stack) ? project.tech_stack : []).map(tech => (
-                                    <span key={tech} className="text-[10px] md:text-xs lg:text-sm text-zinc-400 font-medium bg-white/[0.05] border border-white/[0.1] px-3 py-1 md:px-4 md:py-1.5 rounded-full">
+                                    <span key={tech} className="text-[10px] md:text-xs lg:text-xs text-zinc-400 font-medium bg-white/[0.05] border border-white/[0.1] px-3 py-1 md:px-4 md:py-1 rounded-full">
                                         {tech}
                                     </span>
                                 ))}
@@ -185,9 +185,9 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
                             <div className="flex items-center justify-center md:justify-start gap-4 lg:gap-6">
                                 <button
                                     onClick={() => project.id && navigate(`/project/${project.id}`)}
-                                    className="px-6 py-3 lg:px-8 lg:py-4 rounded-2xl bg-white text-black font-bold uppercase tracking-wider text-xs md:text-sm lg:text-base hover:scale-105 transition-transform flex items-center gap-2"
+                                    className="px-6 py-3 lg:px-7 lg:py-3.5 rounded-2xl bg-white text-black font-bold uppercase tracking-wider text-xs md:text-sm lg:text-sm hover:scale-105 transition-transform flex items-center gap-2"
                                 >
-                                    <Info size={16} className="md:w-5 md:h-5 lg:w-6 lg:h-6" /> Details
+                                    <Info size={16} className="md:w-5 md:h-5 lg:w-5 lg:h-5" /> Details
                                 </button>
                                 {project.live_link && project.live_link !== '#' && (
                                     <a

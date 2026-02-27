@@ -59,9 +59,9 @@ const HeroSection = () => {
 
                 {/* Centre: Name */}
                 <StaggerParent delay={0.6} className="z-10 relative pointer-events-none">
-                    <h1 className="text-[15vw] md:text-[10vw] lg:text-[8vw] font-bold tracking-tight text-white leading-[0.9] whitespace-nowrap">
+                    <h1 className="text-[15vw] md:text-[10vw] lg:text-[6.5vw] font-bold tracking-tight text-white leading-[0.9] whitespace-nowrap">
                         <StaggerChild className="block">ashish</StaggerChild>
-                        <StaggerChild className="block text-zinc-600 font-light italic text-[8vw] md:text-[4.5vw] mt-2">
+                        <StaggerChild className="block text-zinc-600 font-light italic text-[8vw] md:text-[4.5vw] lg:text-[3.6vw] mt-2">
                             k. amin
                         </StaggerChild>
                     </h1>
@@ -82,9 +82,9 @@ const HeroSection = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1.5, duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                    className="mt-8 md:mt-10 max-w-xl md:max-w-2xl lg:max-w-3xl mx-auto z-10 relative pointer-events-none px-4"
+                    className="mt-8 md:mt-10 max-w-xl md:max-w-2xl lg:max-w-2xl mx-auto z-10 relative pointer-events-none px-4"
                 >
-                    <p className="text-sm md:text-lg lg:text-xl text-zinc-400 leading-relaxed font-light">
+                    <p className="text-sm md:text-base lg:text-lg text-zinc-400 leading-relaxed font-light">
                         {desc || defaultDesc}
                     </p>
                 </motion.div>
