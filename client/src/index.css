@@ -8,6 +8,8 @@
   html {
     scroll-behavior: smooth;
     color-scheme: dark;
+    scroll-padding-top: 80px;
+    /* Offset for sticky Navbar */
   }
 
   body {

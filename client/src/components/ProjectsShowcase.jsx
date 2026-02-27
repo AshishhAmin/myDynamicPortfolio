@@ -112,6 +112,16 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
 
             {/* Carousel Container */}
             <div className="relative h-[550px] md:h-[550px] lg:h-[55vh] w-full flex items-center justify-center mt-4">
+                {/* Dots for mobile - visual cue for swiping */}
+                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex gap-2 md:hidden">
+                    {displayProjects.map((_, i) => (
+                        <div
+                            key={i}
+                            className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${i === currentIndex ? 'bg-white w-4' : 'bg-white/20'}`}
+                        />
+                    ))}
+                </div>
+
                 <AnimatePresence initial={false} custom={direction}>
                     <motion.div
                         key={currentIndex}
@@ -204,7 +214,7 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
                     </motion.div>
                 </AnimatePresence>
 
-                {/* Navigation Buttons */}
+                {/* Navigation Buttons - Hidden on mobile */}
                 <button
                     className="absolute left-0 z-20 p-4 rounded-full bg-white/[0.03] border border-white/[0.08] text-white hover:bg-white/[0.1] transition-all hidden md:block -ml-6"
                     onClick={() => paginate(-1)}
@@ -218,8 +228,8 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
                     <ChevronRight size={24} />
                 </button>
 
-                {/* Dot Indicators */}
-                <div className="absolute bottom-[-40px] left-1/2 -translate-x-1/2 flex gap-3">
+                {/* Dot Indicators - Visible on all screens for consistency, but styled as icons on desktop */}
+                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 hidden md:flex gap-3">
                     {displayProjects.map((_, i) => (
                         <button
                             key={i}
@@ -227,8 +237,7 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
                                 setDirection(i > currentIndex ? 1 : -1);
                                 setCurrentIndex(i);
                             }}
-                            className={`w-2 h-2 rounded-full transition-all duration-300 ${i === currentIndex ? 'bg-white w-6' : 'bg-zinc-800'
-                                }`}
+                            className={`w-2 h-2 rounded-full transition-all duration-300 ${i === currentIndex ? 'bg-white w-6' : 'bg-zinc-800'}`}
                         />
                     ))}
                 </div>

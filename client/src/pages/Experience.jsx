@@ -106,7 +106,7 @@ const Experience = () => {
 
     return (
         <div id="experience" className="min-h-[100dvh] flex flex-col justify-center px-6 pt-24 pb-24 scroll-mt-32">
-            <div className="max-w-5xl lg:max-w-6xl mx-auto w-full flex flex-col h-[100dvh] max-h-[750px]">
+            <div className="max-w-5xl lg:max-w-6xl mx-auto w-full flex flex-col md:h-[100dvh] md:max-h-[750px] lg:max-h-[850px]">
                 <FadeUp className="mb-8 md:mb-12 text-center shrink-0">
                     <p className="text-[11px] md:text-sm text-zinc-600 tracking-[0.3em] uppercase mb-4">The Journey</p>
                     <h2 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-white tracking-tighter">
@@ -115,9 +115,9 @@ const Experience = () => {
                 </FadeUp>
 
                 {/* Timeline Container */}
-                <div className="relative flex-1 overflow-y-auto pr-2 md:pr-4 rounded-xl" style={{ scrollbarWidth: 'thin', scrollbarColor: '#3f3f46 transparent' }}>
+                <div className="relative flex-1 md:overflow-y-auto md:pr-4 rounded-xl custom-scrollbar">
                     {/* Vertical Line for Mobile */}
-                    <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-zinc-800 md:hidden hidden md:block" />
+                    <div className="absolute left-6 top-0 bottom-0 w-px bg-zinc-800 md:hidden" />
 
                     <div className="space-y-0 relative pb-12">
                         {timeline.map((item, index) => (

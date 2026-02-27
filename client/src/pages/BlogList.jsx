@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight, FileText } from 'lucide-react';
 import { API_URL } from '../config';
 import { Link, useNavigate } from 'react-router-dom';
-import AnimatedBackground from '../components/AnimatedBackground';
 import Footer from '../components/Footer';
 
 export default function BlogList() {
@@ -27,22 +26,9 @@ export default function BlogList() {
 
     return (
         <div className="min-h-screen bg-[#050505] text-[#d0d0d0] selection:bg-cyber-neon/30 flex flex-col">
-            <AnimatedBackground />
 
-            {/* Navigation Pill */}
-            <nav className="fixed top-0 left-0 w-full z-50 px-6 py-8 flex justify-between items-center pointer-events-none">
-                <motion.button
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    onClick={() => navigate('/')}
-                    className="pointer-events-auto group flex items-center gap-2 pill pl-4 pr-6 py-2 bg-[#0a0a0a]/80 backdrop-blur-md border border-white/10 hover:border-cyber-neon/50 transition-all font-mono"
-                >
-                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                    <span className="text-sm font-bold uppercase tracking-widest text-white">Back</span>
-                </motion.button>
-            </nav>
 
-            <main className="flex-1 relative pt-32 pb-24 px-6 md:px-12 max-w-5xl mx-auto w-full">
+            <main className="flex-1 relative pt-32 pb-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
 
                 {/* Header Section */}
                 <motion.div
@@ -56,7 +42,7 @@ export default function BlogList() {
                         </div>
                         <p className="text-xs font-mono text-zinc-500 uppercase tracking-[0.3em]">Insights & Thoughts</p>
                     </div>
-                    <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter text-white">
+                    <h1 className="text-3xl md:text-5xl lg:text-5xl font-black uppercase tracking-tighter text-white">
                         Writings
                     </h1>
                 </motion.div>

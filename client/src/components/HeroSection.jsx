@@ -59,9 +59,9 @@ const HeroSection = () => {
 
                 {/* Centre: Name */}
                 <StaggerParent delay={0.6} className="z-10 relative pointer-events-none">
-                    <h1 className="text-[15vw] md:text-[10vw] lg:text-[6.5vw] font-bold tracking-tight text-white leading-[0.9] whitespace-nowrap">
+                    <h1 className="text-[18vw] md:text-[10vw] lg:text-[6.5vw] font-bold tracking-tight text-white leading-[0.85] md:leading-[0.9] whitespace-nowrap">
                         <StaggerChild className="block">ashish</StaggerChild>
-                        <StaggerChild className="block text-zinc-600 font-light italic text-[8vw] md:text-[4.5vw] lg:text-[3.6vw] mt-2">
+                        <StaggerChild className="block text-zinc-600 font-light italic text-[10vw] md:text-[4.5vw] lg:text-[3.6vw] mt-1 md:mt-2">
                             k. amin
                         </StaggerChild>
                     </h1>

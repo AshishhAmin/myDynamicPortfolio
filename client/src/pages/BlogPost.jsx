@@ -60,22 +60,9 @@ export default function BlogPost() {
 
     return (
         <div className="min-h-screen bg-[#050505] text-[#d0d0d0] selection:bg-cyber-neon/30">
-            <AnimatedBackground />
 
-            {/* Navigation */}
-            <nav className="fixed top-0 left-0 w-full z-50 px-6 py-8 flex justify-between items-center pointer-events-none">
-                <motion.button
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    onClick={() => navigate('/blog')}
-                    className="pointer-events-auto group flex items-center gap-2 pill pl-4 pr-6 py-2 bg-[#0a0a0a]/80 backdrop-blur-md border border-white/10 hover:border-cyber-neon/50 transition-all font-mono"
-                >
-                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                    <span className="text-sm font-bold uppercase tracking-widest text-white">All Articles</span>
-                </motion.button>
-            </nav>
 
-            <main className="relative pt-32 pb-24 px-6 md:px-12 max-w-4xl mx-auto w-full">
+            <main className="relative pt-32 pb-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
 
                 {/* Header */}
                 <motion.header
@@ -94,7 +81,7 @@ export default function BlogPost() {
                         </div>
                     </div>
 
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter text-white mb-8 leading-[1.1]">
+                    <h1 className="text-3xl md:text-5xl lg:text-5xl font-black uppercase tracking-tighter text-white mb-8 leading-[1.1]">
                         {blog.title}
                     </h1>
 

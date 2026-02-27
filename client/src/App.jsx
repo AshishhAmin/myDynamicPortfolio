@@ -18,30 +18,22 @@ import CustomCursor from './components/CustomCursor';
 import './index.css';
 
 const LandingPage = ({ isAdmin, setIsAdmin }) => (
-    <>
-        <AnimatedBackground />
-        <Navbar isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
-        <main className="relative h-[100dvh] overflow-y-auto snap-y snap-mandatory scroll-smooth">
-            <div className="snap-start"><HeroSection /></div>
-            <div className="snap-start"><ProjectsShowcase /></div>
-            <div className="snap-start"><Experience /></div>
-            <div className="snap-start"><GithubPulse /></div>
-            <div className="snap-start"><SkillsSection /></div>
-            <div className="snap-start"><BlogSection /></div>
-            <div className="snap-start"><Footer /></div>
-        </main>
-    </>
+    <main className="relative h-[100dvh] overflow-y-auto snap-y snap-mandatory scroll-smooth">
+        <div className="snap-start"><HeroSection /></div>
+        <div className="snap-start"><ProjectsShowcase /></div>
+        <div className="snap-start"><Experience /></div>
+        <div className="snap-start"><GithubPulse /></div>
+        <div className="snap-start"><SkillsSection /></div>
+        <div className="snap-start"><BlogSection /></div>
+        <div className="snap-start"><Footer /></div>
+    </main>
 );
 
 const ExperiencePage = ({ isAdmin, setIsAdmin }) => (
-    <>
-        <AnimatedBackground />
-        <Navbar isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
-        <main className="relative h-[100dvh] overflow-y-auto snap-y snap-mandatory scroll-smooth">
-            <div className="snap-start"><Experience /></div>
-            <div className="snap-start"><Footer /></div>
-        </main>
-    </>
+    <main className="relative h-[100dvh] overflow-y-auto snap-y snap-mandatory scroll-smooth">
+        <div className="snap-start"><Experience /></div>
+        <div className="snap-start"><Footer /></div>
+    </main>
 );
 
 const PageTransition = ({ children }) => (
@@ -79,7 +71,11 @@ function App() {
     return (
         <BrowserRouter>
             <CustomCursor />
-            <AnimatedRoutes isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
+            <div className="relative min-h-screen bg-[#050505]">
+                <AnimatedBackground />
+                <Navbar isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
+                <AnimatedRoutes isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
+            </div>
         </BrowserRouter>
     );
 }

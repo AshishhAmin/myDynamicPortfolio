@@ -60,22 +60,9 @@ export default function ProjectDetail() {
 
     return (
         <div className="min-h-screen bg-[#050505] text-[#d0d0d0] selection:bg-cyber-neon/30">
-            <AnimatedBackground />
 
-            {/* Header / Nav */}
-            <nav className="fixed top-0 left-0 w-full z-50 px-6 py-8 flex justify-between items-center pointer-events-none">
-                <motion.button
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    onClick={() => navigate(-1)}
-                    className="pointer-events-auto group flex items-center gap-2 pill pl-4 pr-6 py-2 bg-[#0a0a0a]/80 backdrop-blur-md border-white/10 hover:border-cyber-neon/50 transition-all"
-                >
-                    <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-                    <span className="text-sm font-bold uppercase tracking-wider">Back</span>
-                </motion.button>
-            </nav>
 
-            <main className="relative pt-32 pb-24 px-6 md:px-12 max-w-6xl mx-auto">
+            <main className="relative pt-32 pb-24 px-6 md:px-12 max-w-[1200px] mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
 
                     {/* Left Column: Image & Basic Info */}
@@ -109,7 +96,7 @@ export default function ProjectDetail() {
                                 ))}
                             </div>
 
-                            <h1 className="text-5xl md:text-7xl font-black uppercase tracking-tighter mb-8 bg-gradient-to-r from-white via-white to-zinc-500 bg-clip-text text-transparent">
+                            <h1 className="text-3xl md:text-5xl lg:text-5xl font-black uppercase tracking-tighter mb-8 bg-gradient-to-r from-white via-white to-zinc-500 bg-clip-text text-transparent">
                                 {project.title}
                             </h1>
 
