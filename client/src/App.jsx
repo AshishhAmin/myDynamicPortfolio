@@ -71,7 +71,7 @@ function App() {
     return (
         <BrowserRouter>
             <CustomCursor />
-            <div className="relative min-h-screen bg-[#050505]">
+            <div className="relative min-h-screen">
                 <AnimatedBackground />
                 <Navbar isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
                 <AnimatedRoutes isAdmin={isAdmin} setIsAdmin={setIsAdmin} />

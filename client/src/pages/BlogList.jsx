@@ -25,7 +25,7 @@ export default function BlogList() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-[#050505] text-[#d0d0d0] selection:bg-cyber-neon/30 flex flex-col">
+        <div className="min-h-screen text-[#d0d0d0] selection:bg-cyber-neon/30 flex flex-col">
 
 
             <main className="flex-1 relative pt-32 pb-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">

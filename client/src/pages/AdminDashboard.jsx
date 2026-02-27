@@ -58,7 +58,7 @@ export default function AdminDashboard() {
 
     if (!isAuthenticated) {
         return (
-            <div className="min-h-screen bg-black flex items-center justify-center p-6 text-white">
+            <div className="min-h-screen flex items-center justify-center px-4 relative">
                 <div className="glass-card p-10 max-w-sm w-full text-center border-white/[0.08]">
                     <div className="w-16 h-16 rounded-full bg-white/[0.05] flex items-center justify-center mx-auto mb-6 border border-white/[0.1]">
                         <Lock size={28} className="text-zinc-500" />
@@ -92,7 +92,7 @@ export default function AdminDashboard() {
     }
 
     return (
-        <div className="min-h-screen bg-[#050505] text-white py-12 px-4 md:px-8">
+        <div className="min-h-screen text-white py-12 px-4 md:px-8">
             <div className="max-w-[1200px] mx-auto">
 
                 {/* Header */}

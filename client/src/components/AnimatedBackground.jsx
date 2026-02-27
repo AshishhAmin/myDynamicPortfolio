@@ -53,23 +53,63 @@ const OrbitalBackground = () => {
             };
         };
 
+        // ── Cosmic dust (larger, softer particles) ────────────────────────
+        const dust = Array.from({ length: 40 }, () => ({
+            x: Math.random(),
+            y: Math.random(),
+            r: Math.random() * 2 + 1,
+            a: Math.random() * 0.3 + 0.1,
+            dx: (Math.random() * 0.0004 + 0.0001),
+            dy: (Math.random() * 0.0002 - 0.0001),
+        }));
+
         // ── Sparse star field ─────────────────────────────────────────────
-        const stars = Array.from({ length: 120 }, () => ({
+        const stars = Array.from({ length: 150 }, () => ({
             x: Math.random(),
             y: Math.random(),
             r: Math.random() * 0.8 + 0.2,
             a: Math.random(),
             da: (Math.random() * 0.003 + 0.001) * (Math.random() > 0.5 ? 1 : -1),
+            dx: (Math.random() - 0.5) * 0.0002, // Slow horizontal drift
+            dy: (Math.random() - 0.5) * 0.0001, // Slow vertical drift
         }));
 
         const draw = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const W = canvas.width, H = canvas.height;
 
+            // ── Dust ────────────────────────────────────────────────────────
+            dust.forEach(d => {
+                d.x += d.dx;
+                d.y += d.dy;
+                if (d.x > 1.1) d.x = -0.1;
+                if (d.y > 1.1) d.y = -0.1;
+                if (d.y < -0.1) d.y = 1.1;
+
+                ctx.save();
+                ctx.globalAlpha = d.a;
+                ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                ctx.beginPath();
+                ctx.arc(d.x * W, d.y * H, d.r, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+
             // ── Stars ───────────────────────────────────────────────────────
             stars.forEach(s => {
                 s.a += s.da;
                 if (s.a > 1 || s.a < 0.15) s.da *= -1;
+
+                // Drift stars slowly
+                s.x += s.dx;
+                s.y += s.dy;
+
+                // Wrap around edges
+                if (s.x > 1.05) s.x = -0.05;
+                if (s.x < -0.05) s.x = 1.05;
+                if (s.y > 1.05) s.y = -0.05;
+                if (s.y < -0.05) s.y = 1.05;
+
                 ctx.save();
                 ctx.globalAlpha = s.a * 0.6;
                 ctx.fillStyle = '#ffffff';
