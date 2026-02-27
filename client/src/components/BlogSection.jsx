@@ -26,12 +26,12 @@ const BlogSection = () => {
     }, []);
 
     return (
-        <section id="blog" className="min-h-[100dvh] flex flex-col justify-center px-6 md:px-16 lg:px-24 max-w-[1400px] w-full mx-auto pt-24 pb-12 relative scroll-mt-32">
+        <section id="blog" className="min-h-[90dvh] flex flex-col justify-center px-6 md:px-16 lg:px-24 max-w-[1200px] w-full mx-auto pt-24 pb-12 relative scroll-mt-32">
             {/* Section Header */}
             <FadeUp className="mb-12 lg:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <p className="text-[11px] md:text-sm text-zinc-500 tracking-[0.3em] uppercase mb-2 lg:mb-4">Technical Insights</p>
-                    <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight">
+                    <p className="text-[11px] md:text-xs text-zinc-500 tracking-[0.3em] uppercase mb-2 lg:mb-3">Technical Insights</p>
+                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white tracking-tight">
                         Latest Writings
                     </h2>
                 </div>
@@ -41,7 +41,7 @@ const BlogSection = () => {
             </FadeUp>
 
             {/* Content grid */}
-            <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-5">
                 {loading ? (
                     <div className="col-span-1 md:col-span-3 flex justify-center py-20">
                         <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-8 h-8 border-2 border-white border-t-transparent rounded-full" />
@@ -58,7 +58,7 @@ const BlogSection = () => {
                                 className="group h-full flex flex-col glass-card overflow-hidden hover:border-cyber-neon/50 transition-colors bg-white/[0.02]"
                             >
                                 {blog.cover_image ? (
-                                    <div className="w-full aspect-[4/3] overflow-hidden border-b border-white/5 relative bg-zinc-900 shrink-0">
+                                    <div className="w-full aspect-video overflow-hidden border-b border-white/5 relative bg-zinc-900 shrink-0">
                                         <img
                                             src={blog.cover_image}
                                             alt={blog.title}
@@ -66,7 +66,7 @@ const BlogSection = () => {
                                         />
                                     </div>
                                 ) : (
-                                    <div className="w-full aspect-[4/3] border-b border-white/5 flex items-center justify-center bg-zinc-900 shrink-0 text-zinc-700">
+                                    <div className="w-full aspect-video border-b border-white/5 flex items-center justify-center bg-zinc-900 shrink-0 text-zinc-700">
                                         <FileText size={48} />
                                     </div>
                                 )}
@@ -76,10 +76,10 @@ const BlogSection = () => {
                                             {new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                                         </span>
                                     </div>
-                                    <h3 className="text-lg md:text-xl font-bold text-white mb-2 lg:mb-3 group-hover:text-cyber-neon transition-colors line-clamp-2 leading-tight">
+                                    <h3 className="text-base md:text-lg font-bold text-white mb-2 group-hover:text-cyber-neon transition-colors line-clamp-2 leading-tight">
                                         {blog.title}
                                     </h3>
-                                    <p className="text-sm text-zinc-500 line-clamp-3 mb-6 lg:mb-8 leading-relaxed font-light">
+                                    <p className="text-[13px] text-zinc-500 line-clamp-3 mb-4 lg:mb-6 leading-relaxed font-light">
                                         {blog.excerpt}
                                     </p>
                                     <div className="mt-auto flex items-center gap-2 lg:gap-3 text-xs md:text-sm font-bold uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">

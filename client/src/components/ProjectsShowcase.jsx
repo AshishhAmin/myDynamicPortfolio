@@ -101,7 +101,7 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
     if (!project) return null;
 
     return (
-        <section id="projects" className="min-h-[100dvh] flex flex-col justify-center px-6 md:px-16 lg:px-24 max-w-[1400px] w-full mx-auto pt-24 pb-12 relative overflow-hidden scroll-mt-32">
+        <section id="projects" className="min-h-[90dvh] flex flex-col justify-center px-6 md:px-16 lg:px-24 max-w-[1200px] w-full mx-auto pt-24 pb-12 relative overflow-hidden scroll-mt-32">
             {/* Section header */}
             <FadeUp className="mb-8 md:mb-12 text-center md:text-left">
                 <p className="text-[11px] md:text-sm text-zinc-600 tracking-[0.3em] uppercase mb-2 md:mb-4">Selected Works</p>
@@ -111,7 +111,7 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
             </FadeUp>
 
             {/* Carousel Container */}
-            <div className="relative h-[600px] md:h-[600px] lg:h-[62vh] w-full flex items-center justify-center mt-4">
+            <div className="relative h-[550px] md:h-[550px] lg:h-[55vh] w-full flex items-center justify-center mt-4">
                 <AnimatePresence initial={false} custom={direction}>
                     <motion.div
                         key={currentIndex}
@@ -140,7 +140,7 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
                     >
                         {/* Project Image */}
                         <div
-                            className="w-full md:w-3/5 aspect-video md:aspect-[16/10] rounded-3xl overflow-hidden border border-white/[0.08] bg-white/[0.03] shadow-2xl relative group cursor-pointer"
+                            className="w-full md:w-1/2 aspect-video md:aspect-[16/10] rounded-3xl overflow-hidden border border-white/[0.08] bg-white/[0.03] shadow-2xl relative group cursor-pointer"
                             onClick={() => project.id && navigate(`/project/${project.id}`)}
                         >
                             <img
@@ -158,7 +158,7 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
                         </div>
 
                         {/* Project Info */}
-                        <div className="w-full md:w-2/5 text-center md:text-left">
+                        <div className="w-full md:w-1/2 text-center md:text-left">
                             <div className="flex items-center justify-center md:justify-start gap-3 mb-4 md:mb-6">
                                 <span className="text-[10px] md:text-sm font-mono text-zinc-600 border border-zinc-800 px-2 py-0.5 rounded-full">
                                     {String(currentIndex + 1).padStart(2, '0')}
@@ -166,15 +166,15 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
                                 <span className="text-[10px] md:text-sm font-mono text-zinc-600 tracking-widest">{project.year || '2025'}</span>
                             </div>
 
-                            <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 md:mb-6 leading-tight">
+                            <h3 className="text-xl md:text-2xl lg:text-3xl font-bold text-white mb-3 md:mb-4 leading-tight tracking-tight">
                                 {project.title}
                             </h3>
 
-                            <p className="text-sm md:text-base lg:text-base text-zinc-500 leading-relaxed mb-6 md:mb-8 max-w-md lg:max-w-lg mx-auto md:mx-0 font-light">
+                            <p className="text-xs md:text-sm lg:text-base text-zinc-500 leading-relaxed mb-4 md:mb-6 max-w-md lg:max-w-lg mx-auto md:mx-0 font-light">
                                 {project.description}
                             </p>
 
-                            <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-6 md:mb-10">
+                            <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-4 md:mb-6">
                                 {(Array.isArray(project.tech_stack) ? project.tech_stack : []).map(tech => (
                                     <span key={tech} className="text-[10px] md:text-xs lg:text-xs text-zinc-400 font-medium bg-white/[0.05] border border-white/[0.1] px-3 py-1 md:px-4 md:py-1 rounded-full">
                                         {tech}

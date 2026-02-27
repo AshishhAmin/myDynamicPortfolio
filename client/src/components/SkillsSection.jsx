@@ -38,7 +38,7 @@ const SkillsSection = () => {
     }, []);
 
     return (
-        <section id="skills" className="min-h-[100dvh] flex flex-col justify-center px-6 md:px-16 lg:px-24 max-w-[1400px] w-full mx-auto pt-24 pb-12 scroll-mt-32">
+        <section id="skills" className="min-h-[100dvh] flex flex-col justify-center px-6 md:px-16 lg:px-24 max-w-[1200px] w-full mx-auto pt-24 pb-12 scroll-mt-32">
             <FadeUp className="mb-16 lg:mb-24">
                 <p className="text-[11px] md:text-sm text-zinc-600 tracking-[0.3em] uppercase mb-2 lg:mb-4">Toolset</p>
                 <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight">
