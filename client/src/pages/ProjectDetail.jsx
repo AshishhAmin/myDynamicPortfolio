@@ -129,26 +129,6 @@ export default function ProjectDetail() {
                                 </div>
                             </div>
 
-                            {/* Architecture card */}
-                            <div className="card p-6">
-                                <h3 className="section-label mb-5">Architecture</h3>
-                                <div className="space-y-4">
-                                    {[
-                                        { Icon: Code2, label: 'Frontend', detail: 'Robust Component Library' },
-                                        { Icon: Cpu, label: 'Performance', detail: 'Optimized Render Logic' },
-                                    ].map(({ Icon, label, detail }) => (
-                                        <div key={label} className="flex items-center gap-3">
-                                            <div className="w-9 h-9 rounded-xl bg-cta/10 border border-cta/20 flex items-center justify-center shrink-0">
-                                                <Icon size={16} className="text-cta" />
-                                            </div>
-                                            <div>
-                                                <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-placeholder">{label}</p>
-                                                <p className="text-sm font-body font-semibold text-primary mt-0.5">{detail}</p>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
                         </motion.div>
                     </div>
                 </div>
