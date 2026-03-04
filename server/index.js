@@ -80,8 +80,11 @@ const initDB = async () => {
         id SERIAL PRIMARY KEY,
         email VARCHAR(255),
         socials JSONB,
-        availability_status VARCHAR(255)
+        availability_status VARCHAR(255),
+        resume_url TEXT
       );
+
+      ALTER TABLE contact ADD COLUMN IF NOT EXISTS resume_url TEXT;
 
       CREATE TABLE IF NOT EXISTS blogs (
         id SERIAL PRIMARY KEY,
@@ -338,17 +341,17 @@ app.delete('/api/skills/:id', authMiddleware, async (req, res) => {
 app.get('/api/contact', async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM contact LIMIT 1');
-    res.json(result.rows[0] || { email: '', socials: [], availability_status: '' });
+    res.json(result.rows[0] || { email: '', socials: [], availability_status: '', resume_url: '' });
   } catch (error) { res.status(500).json({ error: 'DB Error' }); }
 });
 
 app.post('/api/contact', authMiddleware, async (req, res) => {
   try {
-    const { email, socials, availability_status } = req.body;
+    const { email, socials, availability_status, resume_url } = req.body;
     await pool.query('DELETE FROM contact');
     const result = await pool.query(
-      'INSERT INTO contact (email, socials, availability_status) VALUES ($1, $2, $3) RETURNING *',
-      [email, JSON.stringify(socials), availability_status]
+      'INSERT INTO contact (email, socials, availability_status, resume_url) VALUES ($1, $2, $3, $4) RETURNING *',
+      [email, JSON.stringify(socials), availability_status, resume_url || null]
     );
     res.json(result.rows[0]);
   } catch (error) { res.status(500).json({ error: 'DB Error' }); }

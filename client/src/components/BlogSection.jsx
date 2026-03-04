@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight, FileText } from 'lucide-react';
 import { API_URL } from '../config';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { FadeUp } from './MotionPrimitives';
 
 const BlogSection = () => {
-    const navigate = useNavigate();
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -14,76 +13,62 @@ const BlogSection = () => {
         setLoading(true);
         fetch(`${API_URL}/api/blogs`)
             .then(res => res.json())
-            .then(data => {
-                // Only take the first 3 for the preview on home screen
-                setBlogs(Array.isArray(data) ? data.slice(0, 3) : []);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error('Error fetching blogs:', err);
-                setLoading(false);
-            });
+            .then(data => { setBlogs(Array.isArray(data) ? data.slice(0, 3) : []); setLoading(false); })
+            .catch(() => { setLoading(false); });
     }, []);
 
     return (
         <section id="blog" className="min-h-[90dvh] flex flex-col justify-center px-6 md:px-16 lg:px-24 max-w-[1200px] w-full mx-auto pt-24 pb-12 relative scroll-mt-32">
-            {/* Section Header */}
             <FadeUp className="mb-12 lg:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <p className="text-[11px] md:text-xs text-zinc-500 tracking-[0.3em] uppercase mb-2 lg:mb-3">Technical Insights</p>
-                    <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white tracking-tight">
+                    <span className="section-label">Technical Insights</span>
+                    <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-primary mt-2 tracking-tight">
                         Latest Writings
                     </h2>
                 </div>
-                <Link to="/blog" className="text-xs md:text-sm font-mono font-bold uppercase tracking-widest text-zinc-400 hover:text-cyber-neon transition-colors flex items-center gap-2">
-                    View All Articles <ArrowUpRight size={16} className="md:w-5 md:h-5" />
+                <Link to="/blog" className="btn-ghost text-xs cursor-pointer">
+                    View All Articles <ArrowUpRight size={15} />
                 </Link>
             </FadeUp>
 
-            {/* Content grid */}
             <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-5">
                 {loading ? (
                     <div className="col-span-1 md:col-span-3 flex justify-center py-20">
-                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-8 h-8 border-2 border-white border-t-transparent rounded-full" />
+                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-8 h-8 border-2 border-cta border-t-transparent rounded-full" />
                     </div>
                 ) : blogs.length === 0 ? (
-                    <div className="col-span-1 md:col-span-3 text-center py-20 border border-white/5 rounded-3xl bg-white/[0.02]">
-                        <p className="text-zinc-500 font-mono text-sm">No articles published yet.</p>
+                    <div className="col-span-1 md:col-span-3 text-center py-20 border border-border-DEFAULT rounded-3xl bg-white">
+                        <p className="text-text-muted font-body text-sm">No articles published yet.</p>
                     </div>
                 ) : (
                     blogs.map((blog, idx) => (
                         <FadeUp key={blog.id} delay={0.1 * idx} className="h-full">
-                            <Link
-                                to={`/blog/${blog.id}`}
-                                className="group h-full flex flex-col glass-card overflow-hidden hover:border-cyber-neon/50 transition-colors bg-white/[0.02]"
-                            >
+                            <Link to={`/blog/${blog.id}`} className="card flex flex-col h-full overflow-hidden cursor-pointer group block">
                                 {blog.cover_image ? (
-                                    <div className="w-full aspect-video overflow-hidden border-b border-white/5 relative bg-zinc-900 shrink-0">
+                                    <div className="w-full aspect-video overflow-hidden border-b border-border-DEFAULT relative bg-bg-muted shrink-0">
                                         <img
                                             src={blog.cover_image}
                                             alt={blog.title}
-                                            className="w-full h-full object-cover brightness-75 group-hover:scale-105 group-hover:brightness-100 transition-all duration-700"
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                                         />
                                     </div>
                                 ) : (
-                                    <div className="w-full aspect-video border-b border-white/5 flex items-center justify-center bg-zinc-900 shrink-0 text-zinc-700">
-                                        <FileText size={48} />
+                                    <div className="w-full aspect-video border-b border-border-DEFAULT flex items-center justify-center bg-bg-muted shrink-0 text-border-strong">
+                                        <FileText size={44} />
                                     </div>
                                 )}
-                                <div className="p-6 flex flex-col flex-1">
-                                    <div className="mb-4 lg:mb-5">
-                                        <span className="text-[10px] md:text-xs font-mono font-black uppercase tracking-widest text-zinc-600">
-                                            {new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                        </span>
-                                    </div>
-                                    <h3 className="text-base md:text-lg font-bold text-white mb-2 group-hover:text-cyber-neon transition-colors line-clamp-2 leading-tight">
+                                <div className="p-5 flex flex-col flex-1">
+                                    <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-placeholder mb-3">
+                                        {new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                    </span>
+                                    <h3 className="font-heading text-lg md:text-xl font-bold text-primary mb-2 group-hover:text-cta transition-colors line-clamp-2 leading-snug">
                                         {blog.title}
                                     </h3>
-                                    <p className="text-[13px] text-zinc-500 line-clamp-3 mb-4 lg:mb-6 leading-relaxed font-light">
+                                    <p className="text-sm text-text-muted line-clamp-3 mb-5 leading-relaxed font-body font-light flex-1">
                                         {blog.excerpt}
                                     </p>
-                                    <div className="mt-auto flex items-center gap-2 lg:gap-3 text-xs md:text-sm font-bold uppercase tracking-widest text-zinc-400 group-hover:text-white transition-colors">
-                                        Read Article <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform lg:w-4 lg:h-4" />
+                                    <div className="mt-auto flex items-center gap-2 text-xs font-body font-bold uppercase tracking-widest text-text-muted group-hover:text-cta transition-colors">
+                                        Read Article <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                                     </div>
                                 </div>
                             </Link>

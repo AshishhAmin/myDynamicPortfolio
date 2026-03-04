@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, ExternalLink, Github, Terminal, Code2, Cpu } from 'lucide-react';
+import { ArrowLeft, ExternalLink, Github, Code2, Cpu } from 'lucide-react';
 import { API_URL } from '../config';
-import AnimatedBackground from '../components/AnimatedBackground';
 import Footer from '../components/Footer';
 
 export default function ProjectDetail() {
@@ -21,122 +20,97 @@ export default function ProjectDetail() {
                 if (!res.ok) throw new Error(res.status === 404 ? 'Project Not Found' : 'Server Error');
                 return res.json();
             })
-            .then(data => {
-                setProject(data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error('Error fetching project:', err);
-                setFetchError(err.message);
-                setLoading(false);
-            });
+            .then(data => { setProject(data); setLoading(false); })
+            .catch(err => { setFetchError(err.message); setLoading(false); });
     }, [id]);
 
     if (loading) return (
-        <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-            <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                className="w-12 h-12 border-4 border-cyber-neon border-t-transparent rounded-full"
-            />
+        <div className="min-h-screen bg-bg-base flex items-center justify-center">
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-10 h-10 border-2 border-cta border-t-transparent rounded-full" />
         </div>
     );
 
     if (!project || fetchError) return (
-        <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-6 text-center">
-            <h1 className="text-4xl font-black uppercase mb-4 text-white">
-                {fetchError || 'Project Not Found'}
-            </h1>
-            <p className="text-zinc-500 mb-8 max-w-md">
-                {fetchError === 'Server Error'
-                    ? "The backend is currently experiencing issues. Please ensure the server is running."
-                    : "The requested project could not be found in our database."}
+        <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center p-6 text-center">
+            <h1 className="font-heading text-4xl font-bold text-primary mb-4">{fetchError || 'Project Not Found'}</h1>
+            <p className="text-text-muted font-body mb-8 max-w-md text-sm">
+                {fetchError === 'Server Error' ? 'The backend is experiencing issues.' : 'The requested project could not be found.'}
             </p>
-            <button onClick={() => navigate('/')} className="pill px-6 py-2 bg-white/5 border border-white/10 hover:bg-white/10 transition-colors text-white font-bold uppercase tracking-wider text-sm">
-                Return Home
-            </button>
+            <button onClick={() => navigate('/')} className="btn-ghost cursor-pointer">Return Home</button>
         </div>
     );
 
     return (
-        <div className="min-h-screen text-[#d0d0d0] selection:bg-cyber-neon/30">
+        <div className="min-h-screen flex flex-col">
+            <main className="flex-1 pt-28 pb-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
 
+                {/* Back */}
+                <Link to="/" className="inline-flex items-center gap-2 text-xs text-text-muted hover:text-primary transition-colors font-body font-semibold mb-10 cursor-pointer">
+                    <ArrowLeft size={14} /> All Projects
+                </Link>
 
-            <main className="relative pt-32 pb-24 px-6 md:px-12 max-w-[1200px] mx-auto">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
+                {/* Hero image */}
+                <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="relative overflow-hidden rounded-3xl border border-border-DEFAULT aspect-[21/9] bg-bg-muted shadow-card-hover mb-12"
+                >
+                    {project.image_url && (
+                        <img src={project.image_url} alt={project.title} className="w-full h-full object-cover" />
+                    )}
+                    {/* Subtle bottom fade */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-transparent to-transparent pointer-events-none" />
+                </motion.div>
 
-                    {/* Left Column: Image & Basic Info */}
-                    <div className="lg:col-span-12">
-                        <motion.div
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            className="relative overflow-hidden rounded-[2.5rem] border border-white/10 aspect-[21/9] bg-[#0a0a0a]"
-                        >
-                            <img
-                                src={project.image_url}
-                                alt={project.title}
-                                className="w-full h-full object-cover"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent" />
-                        </motion.div>
-                    </div>
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
 
-                    {/* Middle: Core Content */}
+                    {/* Main content */}
                     <div className="lg:col-span-8">
-                        <motion.div
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.1 }}
-                        >
-                            <div className="flex flex-wrap gap-3 mb-8">
-                                {project.tech_stack && project.tech_stack.map((tech, i) => (
-                                    <span key={i} className="px-3 py-1 text-[10px] font-black uppercase tracking-widest bg-white/[0.03] border border-white/[0.08] rounded-full text-zinc-400">
-                                        {tech}
-                                    </span>
+                        <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }}>
+
+                            {/* Tech pills */}
+                            <div className="flex flex-wrap gap-2 mb-6">
+                                {(project.tech_stack || []).map((tech, i) => (
+                                    <span key={i} className="pill">{tech}</span>
                                 ))}
                             </div>
 
-                            <h1 className="text-3xl md:text-5xl lg:text-5xl font-black uppercase tracking-tighter mb-8 bg-gradient-to-r from-white via-white to-zinc-500 bg-clip-text text-transparent">
+                            <h1 className="font-heading text-3xl md:text-5xl font-bold text-primary tracking-tight mb-6 leading-tight">
                                 {project.title}
                             </h1>
 
-                            <div className="prose prose-invert max-w-none">
-                                <p className="text-xl text-zinc-400 font-medium leading-relaxed mb-12 italic border-l-4 border-cyber-neon pl-8 py-2">
-                                    {project.description}
-                                </p>
+                            <p className="text-lg md:text-xl text-text-muted font-body font-light leading-relaxed border-l-4 border-cta pl-5 py-1 italic mb-10">
+                                {project.description}
+                            </p>
 
-                                <div className="space-y-8">
-                                    <h3 className="text-sm font-black uppercase tracking-[0.2em] text-cyber-neon flex items-center gap-3">
-                                        <Terminal size={18} /> The Deep Dive
-                                    </h3>
-                                    <div className="text-zinc-300 leading-relaxed font-light text-lg whitespace-pre-wrap">
-                                        {project.long_description || "Detailed technical breakdown coming soon. This project focuses on high-performance execution and scalable architecture."}
-                                    </div>
+                            {/* Deep dive */}
+                            <div className="space-y-4">
+                                <h3 className="flex items-center gap-2 section-label">
+                                    <Code2 size={14} /> The Deep Dive
+                                </h3>
+                                <div className="text-text-muted font-body leading-relaxed text-base whitespace-pre-wrap">
+                                    {project.long_description || 'Detailed technical breakdown coming soon. This project focuses on high-performance execution and scalable architecture.'}
                                 </div>
                             </div>
                         </motion.div>
                     </div>
 
-                    {/* Right Column: Sidebar Actions */}
-                    <div className="lg:col-span-4 lg:sticky lg:top-32 h-fit">
-                        <motion.div
-                            initial={{ x: 20, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            transition={{ delay: 0.2 }}
-                            className="glass-card p-8 border-white/[0.08] flex flex-col gap-8"
-                        >
-                            <div className="space-y-6">
-                                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-zinc-500">Project Links</h3>
-                                <div className="flex flex-col gap-4">
+                    {/* Sidebar */}
+                    <div className="lg:col-span-4 lg:sticky lg:top-28 h-fit space-y-4">
+                        <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
+
+                            {/* Links card */}
+                            <div className="card p-6">
+                                <h3 className="section-label mb-5">Project Links</h3>
+                                <div className="flex flex-col gap-3">
                                     {project.live_link && (
                                         <a
                                             href={project.live_link}
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="group flex items-center justify-between p-4 rounded-2xl bg-white text-[#050505] font-bold uppercase tracking-wider text-sm hover:scale-[1.02] active:scale-[0.98] transition-all"
+                                            className="btn-primary cursor-pointer justify-between"
                                         >
-                                            View Live Demo
-                                            <ExternalLink size={18} />
+                                            View Live Demo <ExternalLink size={15} />
                                         </a>
                                     )}
                                     {project.github_link && (
@@ -144,38 +118,35 @@ export default function ProjectDetail() {
                                             href={project.github_link}
                                             target="_blank"
                                             rel="noreferrer"
-                                            className="group flex items-center justify-between p-4 rounded-2xl border border-white/10 hover:border-white/25 hover:bg-white/[0.03] text-white font-bold uppercase tracking-wider text-sm transition-all"
+                                            className="btn-ghost cursor-pointer justify-between"
                                         >
-                                            Storage / Code
-                                            <Github size={18} />
+                                            Source Code <Github size={15} />
                                         </a>
+                                    )}
+                                    {!project.live_link && !project.github_link && (
+                                        <p className="text-xs text-text-placeholder font-body italic">No links available yet.</p>
                                     )}
                                 </div>
                             </div>
 
-                            <div className="h-px bg-white/5" />
-
-                            <div className="space-y-6">
-                                <h3 className="text-xs font-black uppercase tracking-[0.3em] text-zinc-500">Architecture</h3>
-                                <div className="grid grid-cols-1 gap-4">
-                                    <div className="flex items-center gap-4 text-zinc-400">
-                                        <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-white/5 flex items-center justify-center text-white">
-                                            <Code2 size={20} />
+                            {/* Architecture card */}
+                            <div className="card p-6">
+                                <h3 className="section-label mb-5">Architecture</h3>
+                                <div className="space-y-4">
+                                    {[
+                                        { Icon: Code2, label: 'Frontend', detail: 'Robust Component Library' },
+                                        { Icon: Cpu, label: 'Performance', detail: 'Optimized Render Logic' },
+                                    ].map(({ Icon, label, detail }) => (
+                                        <div key={label} className="flex items-center gap-3">
+                                            <div className="w-9 h-9 rounded-xl bg-cta/10 border border-cta/20 flex items-center justify-center shrink-0">
+                                                <Icon size={16} className="text-cta" />
+                                            </div>
+                                            <div>
+                                                <p className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-placeholder">{label}</p>
+                                                <p className="text-sm font-body font-semibold text-primary mt-0.5">{detail}</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Frontend</div>
-                                            <div className="text-sm font-bold">Robust Component Library</div>
-                                        </div>
-                                    </div>
-                                    <div className="flex items-center gap-4 text-zinc-400">
-                                        <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-white/5 flex items-center justify-center text-white">
-                                            <Cpu size={20} />
-                                        </div>
-                                        <div>
-                                            <div className="text-[10px] font-black uppercase tracking-widest text-zinc-600">Performance</div>
-                                            <div className="text-sm font-bold">Optimized Render Logic</div>
-                                        </div>
-                                    </div>
+                                    ))}
                                 </div>
                             </div>
                         </motion.div>

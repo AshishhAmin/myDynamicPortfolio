@@ -1,41 +1,38 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../config';
-import { Plus, Edit2, Trash2, Globe, Lock, Code2, Link, Image as ImageIcon } from 'lucide-react';
+import { Plus, Pencil, Trash2, Globe, Lock, Code2, Link, Image as ImageIcon, Check, X, UploadCloud } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const INITIAL_FORM_STATE = { title: '', excerpt: '', content: '', published: false };
+const INITIAL = { title: '', excerpt: '', content: '', published: false, cover_image: '' };
+
+/* ─── Shared style tokens ─── */
+const inputCls = 'w-full px-3 py-2.5 rounded-xl bg-white border border-[#E4E4E7] text-[#18181B] placeholder-[#A1A1AA] focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition text-sm';
+const labelCls = 'block text-[11px] font-bold text-[#52525B] uppercase tracking-widest mb-1.5';
+const saveBtnCls = 'w-full flex items-center justify-center gap-2 bg-[#2563EB] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#1D4ED8] transition-colors disabled:opacity-50 cursor-pointer';
 
 export default function AdminBlogForm() {
     const [blogs, setBlogs] = useState([]);
-    const [formData, setFormData] = useState(INITIAL_FORM_STATE);
+    const [formData, setFormData] = useState(INITIAL);
     const [imageFile, setImageFile] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editId, setEditId] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [msg, setMsg] = useState('');
 
-    useEffect(() => {
-        fetchBlogs();
-    }, []);
+    useEffect(() => { fetchBlogs(); }, []);
 
     const fetchBlogs = async () => {
         try {
             const res = await fetch(`${API_URL}/api/blogs/all`);
             const data = await res.json();
             setBlogs(data);
-        } catch (err) {
-            console.error('Failed to fetch blogs:', err);
-        }
+        } catch (err) { console.error('Failed to fetch blogs:', err); }
     };
 
-    const handleFileChange = (e) => {
-        if (e.target.files && e.target.files[0]) {
-            setImageFile(e.target.files[0]);
-        }
-    };
+    const flash = (text) => { setMsg(text); setTimeout(() => setMsg(''), 3500); };
 
-    const insertMarkdown = (syntax) => {
+    const insertMarkdown = (syntax) =>
         setFormData(prev => ({ ...prev, content: prev.content + syntax }));
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -60,22 +57,21 @@ export default function AdminBlogForm() {
             const res = await fetch(url, {
                 method,
                 body: payload,
-                headers: {
-                    'x-admin-token': sessionStorage.getItem('adminToken')
-                }
+                headers: { 'x-admin-token': sessionStorage.getItem('adminToken') },
             });
             if (res.ok) {
-                setFormData(INITIAL_FORM_STATE);
+                flash(isEditing ? '✅ Post updated!' : '✅ Post published!');
+                setFormData(INITIAL);
                 setImageFile(null);
                 setIsEditing(false);
                 setEditId(null);
                 fetchBlogs();
             } else {
-                alert('Failed to save blog');
+                flash('❌ Failed to save blog.');
             }
         } catch (err) {
             console.error(err);
-            alert('Error saving blog');
+            flash('❌ Error saving blog.');
         } finally {
             setLoading(false);
         }
@@ -89,165 +85,196 @@ export default function AdminBlogForm() {
             excerpt: blog.excerpt,
             content: blog.content,
             published: blog.published,
-            cover_image: blog.cover_image
+            cover_image: blog.cover_image || '',
         });
+        setImageFile(null);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
+
+    const cancelEdit = () => { setIsEditing(false); setFormData(INITIAL); setEditId(null); setImageFile(null); };
 
     const handleDelete = async (id) => {
         if (!confirm('Delete this blog post?')) return;
         try {
             const res = await fetch(`${API_URL}/api/blogs/${id}`, {
                 method: 'DELETE',
-                headers: {
-                    'x-admin-token': sessionStorage.getItem('adminToken')
-                }
+                headers: { 'x-admin-token': sessionStorage.getItem('adminToken') },
             });
-            if (res.ok) fetchBlogs();
-        } catch (err) {
-            console.error(err);
-        }
+            if (res.ok) { flash('✅ Post deleted.'); fetchBlogs(); }
+        } catch (err) { console.error(err); }
     };
 
-    const inputCls = "w-full bg-[#0a0a0a] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-cyber-neon focus:ring-1 focus:ring-cyber-neon transition-all font-mono text-sm";
-    const labelCls = "block text-xs font-black uppercase tracking-widest text-zinc-500 mb-2";
-
     return (
-        <div className="space-y-12">
-            {/* Form Section */}
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card p-8 border-white/10">
-                <div className="flex justify-between items-center mb-8">
-                    <h2 className="text-xl font-black uppercase tracking-widest text-white">
-                        {isEditing ? 'Edit Post' : 'New Post'}
-                    </h2>
+        <div className="space-y-8">
+
+            {/* ── Form ─────────────────────────────────── */}
+            <div className="border border-[#E4E4E7] rounded-2xl p-6 bg-white space-y-5">
+                <div className="flex items-center justify-between">
+                    <p className={`${labelCls} flex items-center gap-1.5`}>
+                        {isEditing ? <><Pencil size={11} /> Editing Post</> : <><Plus size={11} /> New Post</>}
+                    </p>
                     {isEditing && (
-                        <button
-                            onClick={() => { setIsEditing(false); setFormData(INITIAL_FORM_STATE); setEditId(null); }}
-                            className="text-xs font-bold uppercase tracking-wider text-zinc-400 hover:text-white"
-                        >
-                            Cancel Edit
+                        <button type="button" onClick={cancelEdit} className="flex items-center gap-1.5 text-xs text-[#71717A] hover:text-[#18181B] transition-colors cursor-pointer">
+                            <X size={13} /> Cancel Edit
                         </button>
                     )}
                 </div>
 
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="md:col-span-2">
-                            <label className={labelCls}>Post Title</label>
-                            <input required type="text" value={formData.title} onChange={e => setFormData({ ...formData, title: e.target.value })} className={inputCls} placeholder="e.g. Building a High-Performance API" />
-                        </div>
+                <form onSubmit={handleSubmit} className="space-y-5">
+                    {/* Title */}
+                    <div>
+                        <label className={labelCls}>Post Title</label>
+                        <input required type="text" value={formData.title}
+                            onChange={e => setFormData({ ...formData, title: e.target.value })}
+                            className={inputCls} placeholder="e.g. Building a High-Performance API" />
+                    </div>
 
-                        <div className="md:col-span-2">
-                            <label className={labelCls}>Excerpt (Short Summary)</label>
-                            <textarea required rows={2} value={formData.excerpt} onChange={e => setFormData({ ...formData, excerpt: e.target.value })} className={`${inputCls} resize-none`} placeholder="A brief description for the blog list..." />
-                        </div>
+                    {/* Excerpt */}
+                    <div>
+                        <label className={labelCls}>Excerpt (Short Summary)</label>
+                        <textarea required rows={2} value={formData.excerpt}
+                            onChange={e => setFormData({ ...formData, excerpt: e.target.value })}
+                            className={`${inputCls} resize-none`} placeholder="A brief description for the blog list…" />
+                    </div>
 
-                        <div className="md:col-span-2 space-y-2">
-                            <div className="flex justify-between items-end">
-                                <label className={labelCls}>Markdown Content</label>
-                                <div className="flex gap-2 mb-2">
-                                    <button type="button" onClick={() => insertMarkdown('## ')} className="p-1.5 hover:bg-white/10 rounded text-zinc-400 hover:text-white transition-colors" title="Heading 2">H2</button>
-                                    <button type="button" onClick={() => insertMarkdown('**Bold**')} className="p-1.5 hover:bg-white/10 rounded text-zinc-400 hover:text-white transition-colors font-bold" title="Bold">B</button>
-                                    <button type="button" onClick={() => insertMarkdown('\n```javascript\n// code here\n```\n')} className="p-1.5 hover:bg-white/10 rounded text-zinc-400 hover:text-white transition-colors" title="Code Block"><Code2 size={16} /></button>
-                                    <button type="button" onClick={() => insertMarkdown('[Link Text](https://)')} className="p-1.5 hover:bg-white/10 rounded text-zinc-400 hover:text-white transition-colors" title="Link"><Link size={16} /></button>
-                                </div>
+                    {/* Markdown content */}
+                    <div>
+                        <div className="flex items-center justify-between mb-1.5">
+                            <label className={labelCls} style={{ marginBottom: 0 }}>Markdown Content</label>
+                            {/* Toolbar */}
+                            <div className="flex items-center gap-1">
+                                {[
+                                    { label: 'H2', action: '## ' },
+                                    { label: 'B', action: '**Bold**' },
+                                ].map(({ label, action }) => (
+                                    <button key={label} type="button"
+                                        onClick={() => insertMarkdown(action)}
+                                        className="px-2 py-1 text-xs font-bold text-[#52525B] hover:bg-[#F4F4F5] rounded transition-colors cursor-pointer">
+                                        {label}
+                                    </button>
+                                ))}
+                                <button type="button" onClick={() => insertMarkdown('\n```javascript\n// code here\n```\n')}
+                                    className="p-1.5 text-[#52525B] hover:bg-[#F4F4F5] rounded transition-colors cursor-pointer" title="Code Block">
+                                    <Code2 size={14} />
+                                </button>
+                                <button type="button" onClick={() => insertMarkdown('[Link Text](https://)')}
+                                    className="p-1.5 text-[#52525B] hover:bg-[#F4F4F5] rounded transition-colors cursor-pointer" title="Link">
+                                    <Link size={14} />
+                                </button>
                             </div>
-                            <textarea required rows={12} value={formData.content} onChange={e => setFormData({ ...formData, content: e.target.value })} className={`${inputCls} resize-y font-mono text-xs`} placeholder="Write your post here using Markdown..." />
                         </div>
+                        <textarea required rows={12} value={formData.content}
+                            onChange={e => setFormData({ ...formData, content: e.target.value })}
+                            className={`${inputCls} resize-y font-mono text-xs`}
+                            placeholder="Write your post here using Markdown…" />
+                    </div>
 
+                    {/* Cover image + Publish toggle */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* Cover image */}
                         <div>
-                            <label className={labelCls}>Cover Image</label>
-                            <div className="relative group cursor-pointer h-[50px]">
-                                <input type="file" accept="image/*" onChange={handleFileChange} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                                <div className="absolute inset-0 w-full h-full bg-[#0a0a0a] border border-white/10 border-dashed rounded-xl flex items-center justify-center gap-3 group-hover:border-cyber-neon transition-colors">
-                                    <ImageIcon size={18} className="text-zinc-500 group-hover:text-cyber-neon transition-colors" />
-                                    <span className="text-sm font-bold text-zinc-400 group-hover:text-white transition-colors">
-                                        {imageFile ? imageFile.name : (formData.cover_image ? 'Image Uploaded (Click to replace)' : 'Upload Cover Image')}
-                                    </span>
-                                </div>
-                            </div>
+                            <label className={labelCls}>
+                                Cover Image {isEditing && <span className="normal-case font-normal text-[#A1A1AA]">(blank = keep current)</span>}
+                            </label>
+                            <label className="flex flex-col items-center justify-center w-full h-20 rounded-xl border-2 border-dashed border-[#E4E4E7] bg-[#F4F4F5] cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-all">
+                                <input type="file" accept="image/*" className="sr-only" onChange={e => e.target.files?.[0] && setImageFile(e.target.files[0])} />
+                                {imageFile ? (
+                                    <span className="text-xs text-[#52525B] font-body px-4 text-center truncate">{imageFile.name}</span>
+                                ) : isEditing && formData.cover_image ? (
+                                    <div className="flex flex-col items-center gap-1">
+                                        <img src={formData.cover_image} alt="cover" className="h-10 object-cover rounded border border-[#E4E4E7]" />
+                                        <span className="text-[10px] text-[#A1A1AA]">Click to replace</span>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <UploadCloud size={20} className="text-[#A1A1AA] mb-1" />
+                                        <span className="text-xs text-[#71717A]">Click to browse</span>
+                                    </>
+                                )}
+                            </label>
                         </div>
 
+                        {/* Published toggle */}
                         <div className="flex flex-col justify-end">
-                            <button
-                                type="button"
+                            <label className={labelCls}>Visibility</label>
+                            <button type="button"
                                 onClick={() => setFormData({ ...formData, published: !formData.published })}
-                                className={`w-full p-4 rounded-xl border flex items-center justify-center gap-3 transition-colors ${formData.published ? 'border-cyber-neon bg-cyber-neon/10 text-cyber-neon' : 'border-white/10 bg-[#0a0a0a] text-zinc-500 hover:border-white/30'}`}
+                                className={`w-full p-3 rounded-xl border flex items-center justify-center gap-2.5 transition-all text-sm font-semibold cursor-pointer ${formData.published
+                                        ? 'border-blue-300 bg-blue-50 text-blue-600'
+                                        : 'border-[#E4E4E7] bg-[#F4F4F5] text-[#71717A] hover:border-blue-200'
+                                    }`}
                             >
-                                {formData.published ? <Globe size={18} /> : <Lock size={18} />}
-                                <span className="font-bold uppercase tracking-wider text-sm">
-                                    {formData.published ? 'Published (Public)' : 'Draft (Private)'}
-                                </span>
+                                {formData.published ? <Globe size={16} /> : <Lock size={16} />}
+                                {formData.published ? 'Published (Public)' : 'Draft (Private)'}
                             </button>
                         </div>
                     </div>
 
-                    <div className="pt-6 border-t border-white/5">
-                        <button type="submit" disabled={loading} className="w-full flex items-center justify-center gap-3 bg-white text-black py-4 rounded-xl font-black uppercase tracking-widest text-sm hover:bg-zinc-200 transition-colors disabled:opacity-50">
-                            {loading ? (
-                                <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-5 h-5 border-2 border-black border-t-transparent rounded-full" />
-                            ) : (
-                                <>
-                                    <Plus size={18} />
-                                    {isEditing ? 'Update Post' : 'Create Post'}
-                                </>
-                            )}
-                        </button>
-                    </div>
+                    {/* Status + submit */}
+                    {msg && <p className={`text-xs font-body ${msg.startsWith('✅') ? 'text-green-600' : 'text-red-500'}`}>{msg}</p>}
+                    <button type="submit" disabled={loading} className={saveBtnCls}>
+                        {loading
+                            ? <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-4 h-4 border-2 border-white border-t-transparent rounded-full" />
+                            : <><Check size={16} /> {isEditing ? 'Update Post' : 'Create Post'}</>
+                        }
+                    </button>
                 </form>
-            </motion.div>
+            </div>
 
-            {/* List Section */}
-            <div className="space-y-4">
-                <h3 className="text-sm font-black uppercase tracking-widest text-zinc-500 mb-6 flex items-center gap-3">
-                    <span className="w-8 h-[1px] bg-zinc-800" />
-                    All Posts
-                    <span className="w-8 h-[1px] bg-zinc-800" />
-                </h3>
-
-                <div className="grid grid-cols-1 gap-4">
+            {/* ── Post list ────────────────────────────── */}
+            {blogs.length > 0 && (
+                <div className="space-y-3">
+                    <p className={labelCls}>All Posts ({blogs.length})</p>
                     <AnimatePresence>
-                        {blogs.map((blog) => (
+                        {blogs.map(blog => (
                             <motion.div
                                 key={blog.id}
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, scale: 0.95 }}
-                                className="glass-card p-6 border-white/5 flex flex-col md:flex-row gap-6 items-start md:items-center justify-between"
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.97 }}
+                                className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${editId === blog.id ? 'border-blue-300 bg-blue-50' : 'border-[#E4E4E7] bg-[#F4F4F5]'
+                                    }`}
                             >
-                                <div className="flex items-center gap-6 flex-1">
-                                    <div className="w-16 h-16 rounded-xl overflow-hidden bg-zinc-900 border border-white/10 shrink-0">
-                                        {blog.cover_image ? (
-                                            <img src={blog.cover_image} alt={blog.title} className="w-full h-full object-cover" />
-                                        ) : (
-                                            <div className="w-full h-full flex items-center justify-center text-zinc-700">
-                                                <ImageIcon size={24} />
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div>
-                                        <div className="flex items-center gap-3 mb-2">
-                                            <h4 className="font-bold text-lg text-white">{blog.title}</h4>
-                                            <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase tracking-widest ${blog.published ? 'bg-cyber-neon/20 text-cyber-neon' : 'bg-zinc-800 text-zinc-400'}`}>
-                                                {blog.published ? 'Published' : 'Draft'}
-                                            </span>
-                                        </div>
-                                        <p className="text-sm text-zinc-500 line-clamp-1">{blog.excerpt}</p>
-                                    </div>
+                                {/* Thumbnail */}
+                                <div className="w-14 h-12 rounded-lg overflow-hidden bg-white border border-[#E4E4E7] shrink-0 flex items-center justify-center">
+                                    {blog.cover_image
+                                        ? <img src={blog.cover_image} alt={blog.title} className="w-full h-full object-cover" />
+                                        : <ImageIcon size={20} className="text-[#A1A1AA]" />
+                                    }
                                 </div>
-                                <div className="flex gap-3 w-full md:w-auto mt-4 md:mt-0 pt-4 md:pt-0 border-t border-white/5 md:border-t-0">
-                                    <button onClick={() => handleEdit(blog)} className="flex-1 md:flex-none flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-white/10 text-white transition-colors text-xs font-bold uppercase tracking-wider">
-                                        <Edit2 size={14} /> Edit
+
+                                {/* Meta */}
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                                        <p className="text-sm font-semibold text-[#18181B] truncate">{blog.title}</p>
+                                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-widest shrink-0 ${blog.published ? 'bg-blue-100 text-blue-600' : 'bg-[#E4E4E7] text-[#71717A]'
+                                            }`}>
+                                            {blog.published ? 'Published' : 'Draft'}
+                                        </span>
+                                    </div>
+                                    <p className="text-xs text-[#71717A] line-clamp-1">{blog.excerpt}</p>
+                                </div>
+
+                                {/* Actions */}
+                                <div className="flex items-center gap-1.5 shrink-0">
+                                    <button
+                                        onClick={() => handleEdit(blog)}
+                                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#E4E4E7] text-[#52525B] hover:border-blue-300 hover:text-blue-600 hover:bg-blue-50 transition-colors text-xs font-semibold cursor-pointer"
+                                    >
+                                        <Pencil size={13} /> Edit
                                     </button>
-                                    <button onClick={() => handleDelete(blog.id)} className="flex-none p-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 text-red-500 transition-colors">
-                                        <Trash2 size={16} />
+                                    <button
+                                        onClick={() => handleDelete(blog.id)}
+                                        className="p-1.5 rounded-lg hover:bg-red-100 text-[#71717A] hover:text-red-500 transition-colors cursor-pointer"
+                                    >
+                                        <Trash2 size={15} />
                                     </button>
                                 </div>
                             </motion.div>
                         ))}
                     </AnimatePresence>
                 </div>
-            </div>
+            )}
         </div>
     );
 }

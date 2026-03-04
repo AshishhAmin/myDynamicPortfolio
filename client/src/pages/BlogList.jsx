@@ -14,98 +14,97 @@ export default function BlogList() {
         setLoading(true);
         fetch(`${API_URL}/api/blogs`)
             .then(res => res.json())
-            .then(data => {
-                setBlogs(Array.isArray(data) ? data : []);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error('Error fetching blogs:', err);
-                setLoading(false);
-            });
+            .then(data => { setBlogs(Array.isArray(data) ? data : []); setLoading(false); })
+            .catch(() => setLoading(false));
     }, []);
 
     return (
-        <div className="min-h-screen text-[#d0d0d0] selection:bg-cyber-neon/30 flex flex-col">
+        <div className="min-h-screen flex flex-col">
+            <main className="flex-1 pt-28 pb-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
 
-
-            <main className="flex-1 relative pt-32 pb-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
-
-                {/* Header Section */}
+                {/* Header */}
                 <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    className="mb-16 md:mb-24 text-center md:text-left"
+                    className="mb-14 md:mb-20"
                 >
-                    <div className="flex items-center justify-center md:justify-start gap-4 mb-4">
-                        <div className="w-12 h-12 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center text-white">
-                            <FileText size={24} />
+                    <Link to="/" className="inline-flex items-center gap-2 text-xs text-text-muted hover:text-primary transition-colors font-body font-semibold mb-8 cursor-pointer">
+                        <ArrowLeft size={14} /> Back to home
+                    </Link>
+                    <div className="flex items-center gap-4 mb-3">
+                        <div className="w-11 h-11 rounded-2xl bg-white border border-border-DEFAULT shadow-card flex items-center justify-center">
+                            <FileText size={20} className="text-cta" />
                         </div>
-                        <p className="text-xs font-mono text-zinc-500 uppercase tracking-[0.3em]">Insights & Thoughts</p>
+                        <span className="section-label">Insights &amp; Thoughts</span>
                     </div>
-                    <h1 className="text-3xl md:text-5xl lg:text-5xl font-black uppercase tracking-tighter text-white">
+                    <h1 className="font-heading text-4xl md:text-6xl font-bold text-primary tracking-tight">
                         Writings
                     </h1>
                 </motion.div>
 
-                {/* Loading State */}
+                {/* Loading */}
                 {loading && (
                     <div className="flex justify-center items-center py-20">
-                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-8 h-8 border-2 border-white border-t-transparent rounded-full" />
+                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-8 h-8 border-2 border-cta border-t-transparent rounded-full" />
                     </div>
                 )}
 
-                {/* Empty State */}
+                {/* Empty */}
                 {!loading && blogs.length === 0 && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20 border border-white/5 rounded-3xl bg-white/[0.02]">
-                        <p className="text-zinc-500 font-mono">No articles published yet.</p>
-                    </motion.div>
+                    <div className="text-center py-20 border border-border-DEFAULT rounded-3xl bg-white">
+                        <p className="text-text-muted font-body">No articles published yet.</p>
+                    </div>
                 )}
 
-                {/* Grid Layout */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <AnimatePresence>
                         {blogs.map((blog, index) => (
                             <motion.div
                                 key={blog.id}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 }}
+                                transition={{ delay: index * 0.08 }}
                             >
                                 <Link
                                     to={`/blog/${blog.id}`}
-                                    className="block group h-full glass-card overflow-hidden hover:border-cyber-neon/50 transition-colors"
+                                    className="card flex flex-col h-full overflow-hidden cursor-pointer group block"
                                 >
-                                    {blog.cover_image && (
-                                        <div className="w-full aspect-video overflow-hidden border-b border-white/5 bg-zinc-900 relative">
+                                    {blog.cover_image ? (
+                                        <div className="w-full aspect-video overflow-hidden border-b border-border-DEFAULT bg-bg-muted relative">
                                             <img
                                                 src={blog.cover_image}
                                                 alt={blog.title}
-                                                className="w-full h-full object-cover brightness-75 group-hover:scale-105 group-hover:brightness-100 transition-all duration-700"
+                                                className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
                                             />
-                                            <div className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0">
-                                                <ArrowUpRight size={16} />
+                                            <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md border border-border-DEFAULT flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity -translate-y-1 group-hover:translate-y-0 shadow-sm">
+                                                <ArrowUpRight size={14} className="text-cta" />
                                             </div>
                                         </div>
-                                    )}
-                                    <div className="p-8">
-                                        <div className="flex items-center gap-3 mb-4">
-                                            <span className="text-[10px] font-mono font-black uppercase tracking-widest text-zinc-600 bg-white/5 px-2 py-0.5 rounded">
-                                                {new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                                            </span>
+                                    ) : (
+                                        <div className="w-full aspect-video border-b border-border-DEFAULT flex items-center justify-center bg-bg-muted text-border-strong">
+                                            <FileText size={40} />
                                         </div>
-                                        <h2 className="text-2xl font-bold text-white mb-3 group-hover:text-cyber-neon transition-colors line-clamp-2">
+                                    )}
+                                    <div className="p-6 flex flex-col flex-1">
+                                        <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-placeholder mb-3 bg-bg-muted px-2 py-0.5 rounded w-fit">
+                                            {new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                        </span>
+                                        <h2 className="font-heading text-xl md:text-2xl font-bold text-primary mb-2 group-hover:text-cta transition-colors line-clamp-2 leading-snug">
                                             {blog.title}
                                         </h2>
-                                        <p className="text-zinc-500 text-sm leading-relaxed line-clamp-3">
+                                        <p className="text-sm text-text-muted font-body leading-relaxed line-clamp-3 mb-4 font-light flex-1">
                                             {blog.excerpt}
                                         </p>
+                                        <div className="flex items-center gap-1.5 text-xs font-body font-bold uppercase tracking-widest text-text-placeholder group-hover:text-cta transition-colors mt-auto">
+                                            Read Article <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                                        </div>
                                     </div>
                                 </Link>
                             </motion.div>
                         ))}
                     </AnimatePresence>
                 </div>
-
             </main>
 
             <Footer />

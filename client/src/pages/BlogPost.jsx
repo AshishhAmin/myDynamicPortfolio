@@ -6,8 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import { API_URL } from '../config';
 import remarkGfm from 'remark-gfm';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import AnimatedBackground from '../components/AnimatedBackground';
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import Footer from '../components/Footer';
 
 export default function BlogPost() {
@@ -25,119 +24,126 @@ export default function BlogPost() {
                 if (!res.ok) throw new Error(res.status === 404 ? 'Article Not Found' : 'Server Error');
                 return res.json();
             })
-            .then(data => {
-                setBlog(data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error('Error fetching blog:', err);
-                setFetchError(err.message);
-                setLoading(false);
-            });
+            .then(data => { setBlog(data); setLoading(false); })
+            .catch(err => { setFetchError(err.message); setLoading(false); });
     }, [id]);
 
+    /* Loading state */
     if (loading) return (
-        <div className="min-h-screen bg-[#050505] flex items-center justify-center">
-            <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }} className="w-12 h-12 border-4 border-cyber-neon border-t-transparent rounded-full" />
+        <div className="min-h-screen bg-bg-base flex items-center justify-center">
+            <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: 'linear' }} className="w-10 h-10 border-2 border-cta border-t-transparent rounded-full" />
         </div>
     );
 
+    /* Error state */
     if (!blog || fetchError) return (
-        <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center p-6 text-center">
-            <h1 className="text-4xl font-black uppercase mb-4 text-white">{fetchError || 'Article Not Found'}</h1>
-            <p className="text-zinc-500 mb-8 max-w-md">
-                {fetchError === 'Server Error' ? "The backend is currently experiencing issues." : "The requested article could not be found."}
+        <div className="min-h-screen bg-bg-base flex flex-col items-center justify-center p-6 text-center">
+            <h1 className="font-heading text-4xl font-bold text-primary mb-4">{fetchError || 'Article Not Found'}</h1>
+            <p className="text-text-muted font-body mb-8 max-w-md text-sm">
+                {fetchError === 'Server Error' ? 'The backend is experiencing issues.' : 'The requested article could not be found.'}
             </p>
-            <button onClick={() => navigate('/blog')} className="pill px-6 py-2 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold uppercase tracking-wider text-sm transition-colors">
+            <button onClick={() => navigate('/blog')} className="btn-ghost cursor-pointer">
                 Back to Blog
             </button>
         </div>
     );
 
-    // Calculate rough read time
     const wordCount = blog.content ? blog.content.split(/\s+/).length : 0;
     const readTime = Math.max(1, Math.ceil(wordCount / 200));
 
     return (
-        <div className="min-h-screen text-[#d0d0d0] selection:bg-cyber-neon/30">
+        <div className="min-h-screen flex flex-col">
+            <main className="flex-1 pt-28 pb-24 px-6 md:px-12 max-w-[800px] mx-auto w-full">
 
-
-            <main className="relative pt-32 pb-24 px-6 md:px-12 max-w-[1200px] mx-auto w-full">
+                {/* Back link */}
+                <Link to="/blog" className="inline-flex items-center gap-2 text-xs text-text-muted hover:text-primary transition-colors font-body font-semibold mb-10 cursor-pointer">
+                    <ArrowLeft size={14} /> All Articles
+                </Link>
 
                 {/* Header */}
-                <motion.header
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    className="mb-12 md:mb-16"
-                >
-                    <div className="flex flex-wrap items-center gap-4 md:gap-6 mb-8">
-                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/10 text-zinc-400 font-mono text-xs uppercase tracking-widest">
-                            <Calendar size={14} />
+                <motion.header initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} className="mb-10">
+                    {/* Meta badges */}
+                    <div className="flex flex-wrap items-center gap-3 mb-6">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-border-DEFAULT text-text-muted font-mono text-xs uppercase tracking-widest shadow-sm">
+                            <Calendar size={12} className="text-cta" />
                             {new Date(blog.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-                        </div>
-                        <div className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/10 text-zinc-400 font-mono text-xs uppercase tracking-widest">
-                            <Clock size={14} />
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-border-DEFAULT text-text-muted font-mono text-xs uppercase tracking-widest shadow-sm">
+                            <Clock size={12} className="text-cta" />
                             {readTime} min read
-                        </div>
+                        </span>
                     </div>
 
-                    <h1 className="text-3xl md:text-5xl lg:text-5xl font-black uppercase tracking-tighter text-white mb-8 leading-[1.1]">
+                    <h1 className="font-heading text-3xl md:text-5xl font-bold text-primary mb-6 leading-tight">
                         {blog.title}
                     </h1>
 
-                    <p className="text-xl md:text-2xl text-zinc-400 font-light leading-relaxed border-l-2 border-cyber-neon pl-6 py-1 italic">
-                        {blog.excerpt}
-                    </p>
+                    {blog.excerpt && (
+                        <p className="text-lg md:text-xl text-text-muted font-body font-light leading-relaxed border-l-4 border-cta pl-5 py-1 italic">
+                            {blog.excerpt}
+                        </p>
+                    )}
                 </motion.header>
 
-                {/* Cover Image */}
+                {/* Cover image */}
                 {blog.cover_image && (
                     <motion.div
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.1 }}
-                        className="w-full aspect-[21/9] md:aspect-[2/1] rounded-3xl overflow-hidden mb-16 border border-white/10 bg-zinc-900"
+                        className="w-full aspect-[21/9] md:aspect-[2/1] rounded-3xl overflow-hidden mb-12 border border-border-DEFAULT bg-bg-muted shadow-card"
                     >
                         <img src={blog.cover_image} alt={blog.title} className="w-full h-full object-cover" />
                     </motion.div>
                 )}
 
-                {/* Markdown Content */}
+                {/* Markdown Article */}
                 <motion.article
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.2 }}
-                    className="prose prose-invert prose-lg max-w-none prose-headings:font-black prose-headings:uppercase prose-headings:tracking-tight prose-a:text-cyber-neon hover:prose-a:text-white prose-a:transition-colors prose-strong:text-white prose-pre:bg-transparent prose-pre:p-0 prose-img:rounded-2xl prose-img:border prose-img:border-white/10"
+                    transition={{ delay: 0.15 }}
+                    className="prose prose-slate prose-lg max-w-none
+                        prose-headings:font-heading prose-headings:font-bold prose-headings:text-primary
+                        prose-p:text-text-muted prose-p:font-body prose-p:leading-relaxed
+                        prose-a:text-cta prose-a:no-underline hover:prose-a:underline
+                        prose-strong:text-primary prose-strong:font-semibold
+                        prose-blockquote:border-l-cta prose-blockquote:text-text-muted prose-blockquote:not-italic
+                        prose-code:text-cta prose-code:bg-cta/8 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+                        prose-pre:bg-transparent prose-pre:p-0
+                        prose-img:rounded-2xl prose-img:border prose-img:border-border-DEFAULT prose-img:shadow-card
+                        prose-hr:border-border-DEFAULT
+                        prose-li:text-text-muted"
                 >
                     <ReactMarkdown
                         remarkPlugins={[remarkGfm]}
                         components={{
                             code({ node, inline, className, children, ...props }) {
-                                const match = /language-(\w+)/.exec(className || '')
+                                const match = /language-(\w+)/.exec(className || '');
                                 return !inline && match ? (
-                                    <div className="rounded-xl overflow-hidden border border-white/10 my-8">
-                                        <div className="bg-zinc-900 px-4 py-2 border-b border-white/10 flex items-center justify-between">
-                                            <span className="text-[10px] font-mono font-black uppercase tracking-widest text-zinc-500">{match[1]}</span>
+                                    <div className="rounded-2xl overflow-hidden border border-border-DEFAULT shadow-card my-6">
+                                        {/* Code block header */}
+                                        <div className="bg-bg-muted px-5 py-2.5 border-b border-border-DEFAULT flex items-center justify-between">
+                                            <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-placeholder">{match[1]}</span>
                                             <div className="flex gap-1.5">
-                                                <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-                                                <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
-                                                <div className="w-2.5 h-2.5 rounded-full bg-white/20" />
+                                                <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                                                <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+                                                <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
                                             </div>
                                         </div>
                                         <SyntaxHighlighter
                                             {...props}
                                             children={String(children).replace(/\n$/, '')}
-                                            style={vscDarkPlus}
+                                            style={oneLight}
                                             language={match[1]}
                                             PreTag="div"
-                                            customStyle={{ margin: 0, borderRadius: 0, background: '#0a0a0a', padding: '1.5rem' }}
+                                            customStyle={{ margin: 0, borderRadius: 0, background: '#FFFFFF', padding: '1.5rem', fontSize: '0.875rem' }}
                                         />
                                     </div>
                                 ) : (
-                                    <code {...props} className="bg-white/10 text-cyber-neon px-1.5 py-0.5 rounded-md font-mono text-sm">
+                                    <code {...props} className="bg-cta/8 text-cta px-1.5 py-0.5 rounded font-mono text-sm">
                                         {children}
                                     </code>
-                                )
+                                );
                             }
                         }}
                     >
@@ -145,11 +151,20 @@ export default function BlogPost() {
                     </ReactMarkdown>
                 </motion.article>
 
-                <div className="mt-24 pt-8 border-t border-white/10 text-center">
-                    <p className="text-zinc-500 font-mono text-sm mb-6">End of article</p>
-                    <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="px-6 py-2 rounded-full border border-white/10 hover:bg-white/5 text-white text-xs font-bold uppercase tracking-widest transition-colors inline-block">
-                        Back to Top
-                    </button>
+                {/* Footer actions */}
+                <div className="mt-16 pt-8 border-t border-border-DEFAULT flex flex-col md:flex-row items-center justify-between gap-4">
+                    <p className="text-text-placeholder font-mono text-xs uppercase tracking-widest">End of article</p>
+                    <div className="flex items-center gap-3">
+                        <button
+                            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                            className="btn-ghost text-xs cursor-pointer"
+                        >
+                            Back to Top ↑
+                        </button>
+                        <Link to="/blog" className="btn-primary text-xs cursor-pointer">
+                            More Articles
+                        </Link>
+                    </div>
                 </div>
             </main>
 

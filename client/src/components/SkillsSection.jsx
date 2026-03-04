@@ -4,18 +4,9 @@ import { FadeUp } from './MotionPrimitives';
 import { API_URL } from '../config';
 
 const SKILL_GROUPS = [
-    {
-        title: 'Engineering',
-        skills: ['React', 'Node.js', 'PostgreSQL', 'Django', 'Next.js', 'Express', 'MongoDB', 'Python']
-    },
-    {
-        title: 'Design & Motion',
-        skills: ['Tailwind CSS', 'Framer Motion', 'Vanilla CSS', 'UI Architecture', 'Layout Design']
-    },
-    {
-        title: 'Modern Stack & AI',
-        skills: ['Prompt Engineering', 'Vite', 'Cloudinary', 'Neon DB', 'MQTT', 'Vector Search']
-    }
+    { title: 'Engineering', skills: ['React', 'Node.js', 'PostgreSQL', 'Django', 'Next.js', 'Express', 'MongoDB', 'Python'] },
+    { title: 'Design & Motion', skills: ['Tailwind CSS', 'Framer Motion', 'Vanilla CSS', 'UI Architecture', 'Layout Design'] },
+    { title: 'Modern Stack & AI', skills: ['Prompt Engineering', 'Vite', 'Cloudinary', 'Neon DB', 'MQTT', 'Vector Search'] },
 ];
 
 const SkillsSection = () => {
@@ -26,39 +17,37 @@ const SkillsSection = () => {
             .then(res => res.json())
             .then(data => {
                 if (data && data.length > 0) {
-                    // Map DB format (category, skills[]) to UI format (title, skills[])
-                    const formatted = data.map(item => ({
-                        title: item.category,
-                        skills: item.skills
-                    }));
-                    setSkillGroups(formatted);
+                    setSkillGroups(data.map(item => ({ title: item.category, skills: item.skills })));
                 }
             })
             .catch(err => console.error('Fetch error:', err));
     }, []);
 
+    const allSkills = Array.from(new Set(skillGroups.reduce((acc, g) => [...acc, ...g.skills], [])));
+
     return (
         <section id="skills" className="min-h-[100dvh] flex flex-col justify-center px-6 md:px-16 lg:px-24 max-w-[1200px] w-full mx-auto pt-24 pb-12 scroll-mt-32">
-            <FadeUp className="mb-16 lg:mb-24">
-                <p className="text-[11px] md:text-sm text-zinc-600 tracking-[0.3em] uppercase mb-2 lg:mb-4">Toolset</p>
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-tight">
+            <FadeUp className="mb-14 lg:mb-20">
+                <span className="section-label">Toolset</span>
+                <h2 className="font-heading text-3xl md:text-4xl lg:text-5xl font-bold text-primary mt-2 tracking-tight">
                     What I work with
                 </h2>
-                <p className="text-sm md:text-sm lg:text-base text-zinc-500 mt-4 lg:mt-6 max-w-lg lg:max-w-xl leading-relaxed font-light">
+                <p className="text-sm md:text-base text-text-muted font-body mt-4 max-w-lg leading-relaxed font-light">
                     Building scalable applications with a focus on clean code,
                     high-performance logic, and pixel-perfect transitions.
                 </p>
             </FadeUp>
 
-            <div className="flex flex-wrap gap-3 md:gap-4 lg:gap-5 max-w-4xl lg:max-w-5xl">
-                {Array.from(new Set(skillGroups.reduce((acc, group) => [...acc, ...group.skills], []))).map((skill, idx) => (
+            <div className="flex flex-wrap gap-3 md:gap-3.5 max-w-4xl">
+                {allSkills.map((skill, idx) => (
                     <motion.div
                         key={skill}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: (idx % 15) * 0.05, duration: 0.4 }}
-                        className="px-4 py-2 md:px-4 md:py-2 lg:px-5 lg:py-2.5 rounded-xl lg:rounded-2xl border border-white/[0.05] bg-white/[0.02] text-zinc-400 hover:border-cyber-neon/50 hover:text-white hover:bg-white/[0.05] transition-all cursor-default shadow-sm text-xs md:text-sm"
+                        whileHover={{ y: -2 }}
+                        transition={{ delay: (idx % 15) * 0.04, duration: 0.35 }}
+                        className="px-4 py-2 rounded-xl border border-border-DEFAULT bg-white text-text-muted hover:border-cta/50 hover:text-cta hover:bg-cta/5 transition-all cursor-default shadow-sm text-xs md:text-sm font-body font-semibold"
                     >
                         {skill}
                     </motion.div>
