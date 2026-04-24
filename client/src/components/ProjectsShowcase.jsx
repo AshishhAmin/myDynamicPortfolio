@@ -6,10 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { FadeUp } from './MotionPrimitives';
 
 const PLACEHOLDER_PROJECTS = [
-    { id: 1, title: 'Cashflow App', description: 'Personal finance tracker with real-time analytics, predictive insights, and beautiful charts.', tech_stack: ['React', 'Node.js', 'MongoDB', 'Tailwind'], image_url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80', live_link: '#', year: '2024' },
-    { id: 2, title: 'Digital Census Portal', description: 'High-scale national data collection with role-based access and survey management dashboards.', tech_stack: ['Next.js', 'PostgreSQL', 'Django'], image_url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80', live_link: '#', year: '2024' },
-    { id: 3, title: 'AGRITECH System', description: 'IoT-powered dashboard for real-time soil monitoring and automated smart irrigation.', tech_stack: ['Vue.js', 'Express', 'MQTT'], image_url: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=800&q=80', live_link: '#', year: '2023' },
-    { id: 4, title: 'Dynamic Portfolio', description: 'This very site — a DB-driven portfolio CMS with Cloudinary uploads & Neon Postgres backend.', tech_stack: ['React', 'Framer Motion', 'Neon DB', 'Cloudinary'], image_url: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=800&q=80', live_link: '#', year: '2025' },
+    { id: 1, title: 'Cashflow App', tech_stack: ['React', 'Node.js', 'MongoDB', 'Tailwind'], image_url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80', live_link: '#', year: '2024' },
+    { id: 2, title: 'Digital Census Portal', tech_stack: ['Next.js', 'PostgreSQL', 'Django'], image_url: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80', live_link: '#', year: '2024' },
+    { id: 3, title: 'AGRITECH System', tech_stack: ['Vue.js', 'Express', 'MQTT'], image_url: 'https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=800&q=80', live_link: '#', year: '2023' },
+    { id: 4, title: 'Dynamic Portfolio', tech_stack: ['React', 'Framer Motion', 'Neon DB', 'Cloudinary'], image_url: 'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?auto=format&fit=crop&w=800&q=80', live_link: '#', year: '2025' },
 ];
 
 const ProjectsShowcase = ({ projects: propProjects = [] }) => {
@@ -104,9 +104,7 @@ const ProjectsShowcase = ({ projects: propProjects = [] }) => {
                                 {project.title}
                             </h3>
 
-                            <p className="text-sm md:text-base text-text-muted font-body leading-relaxed mb-5 max-w-md mx-auto md:mx-0 font-light">
-                                {project.description}
-                            </p>
+                            <div className="mb-5"></div>
 
                             <div className="flex flex-wrap justify-center md:justify-start gap-2 mb-6">
                                 {(Array.isArray(project.tech_stack) ? project.tech_stack : []).map(tech => (

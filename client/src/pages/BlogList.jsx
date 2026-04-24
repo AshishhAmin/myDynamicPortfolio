@@ -70,32 +70,15 @@ export default function BlogList() {
                                     to={`/blog/${blog.id}`}
                                     className="card flex flex-col h-full overflow-hidden cursor-pointer group block"
                                 >
-                                    {blog.cover_image ? (
-                                        <div className="w-full aspect-video overflow-hidden border-b border-border-DEFAULT bg-bg-muted relative">
-                                            <img
-                                                src={blog.cover_image}
-                                                alt={blog.title}
-                                                className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
-                                            />
-                                            <div className="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md border border-border-DEFAULT flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity -translate-y-1 group-hover:translate-y-0 shadow-sm">
-                                                <ArrowUpRight size={14} className="text-cta" />
-                                            </div>
-                                        </div>
-                                    ) : (
-                                        <div className="w-full aspect-video border-b border-border-DEFAULT flex items-center justify-center bg-bg-muted text-border-strong">
-                                            <FileText size={40} />
-                                        </div>
-                                    )}
+                                    {/* Image section removed */}
                                     <div className="p-6 flex flex-col flex-1">
                                         <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-placeholder mb-3 bg-bg-muted px-2 py-0.5 rounded w-fit">
-                                            {new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                            {new Date(blog.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                         </span>
                                         <h2 className="font-heading text-xl md:text-2xl font-bold text-primary mb-2 group-hover:text-cta transition-colors line-clamp-2 leading-snug">
                                             {blog.title}
                                         </h2>
-                                        <p className="text-sm text-text-muted font-body leading-relaxed line-clamp-3 mb-4 font-light flex-1">
-                                            {blog.excerpt}
-                                        </p>
+                                        <div className="flex-1 mb-4"></div>
                                         <div className="flex items-center gap-1.5 text-xs font-body font-bold uppercase tracking-widest text-text-placeholder group-hover:text-cta transition-colors mt-auto">
                                             Read Article <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                                         </div>

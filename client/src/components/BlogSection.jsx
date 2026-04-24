@@ -44,29 +44,15 @@ const BlogSection = () => {
                     blogs.map((blog, idx) => (
                         <FadeUp key={blog.id} delay={0.1 * idx} className="h-full">
                             <Link to={`/blog/${blog.id}`} className="card flex flex-col h-full overflow-hidden cursor-pointer group block">
-                                {blog.cover_image ? (
-                                    <div className="w-full aspect-video overflow-hidden border-b border-border-DEFAULT relative bg-bg-muted shrink-0">
-                                        <img
-                                            src={blog.cover_image}
-                                            alt={blog.title}
-                                            className="w-full h-full object-cover group-hover:scale-105 transition-all duration-700"
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className="w-full aspect-video border-b border-border-DEFAULT flex items-center justify-center bg-bg-muted shrink-0 text-border-strong">
-                                        <FileText size={44} />
-                                    </div>
-                                )}
+                                {/* Image section removed */}
                                 <div className="p-5 flex flex-col flex-1">
                                     <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-text-placeholder mb-3">
-                                        {new Date(blog.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                                        {new Date(blog.created_at).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                     </span>
                                     <h3 className="font-heading text-lg md:text-xl font-bold text-primary mb-2 group-hover:text-cta transition-colors line-clamp-2 leading-snug">
                                         {blog.title}
                                     </h3>
-                                    <p className="text-sm text-text-muted line-clamp-3 mb-5 leading-relaxed font-body font-light flex-1">
-                                        {blog.excerpt}
-                                    </p>
+                                    <div className="flex-1"></div>
                                     <div className="mt-auto flex items-center gap-2 text-xs font-body font-bold uppercase tracking-widest text-text-muted group-hover:text-cta transition-colors">
                                         Read Article <ArrowUpRight size={13} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                                     </div>

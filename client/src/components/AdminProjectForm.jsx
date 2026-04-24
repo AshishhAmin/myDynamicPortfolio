@@ -4,7 +4,6 @@ import { API_URL } from '../config';
 
 const EMPTY_FORM = {
     title: '',
-    description: '',
     long_description: '',
     tech_stack: '',
     live_link: '',
@@ -71,7 +70,6 @@ export default function AdminProjectForm() {
         setExistingImageUrl(p.image_url || '');
         setFormData({
             title: p.title,
-            description: p.description,
             long_description: p.long_description || '',
             tech_stack: Array.isArray(p.tech_stack) ? p.tech_stack.join(', ') : p.tech_stack,
             live_link: p.live_link || '',
@@ -151,13 +149,10 @@ export default function AdminProjectForm() {
                     <input type="text" required placeholder="e.g. Neural Chat App" className={inputCls} {...field('title')} />
                 </div>
 
-                <div>
-                    <label className={labelCls}>Brief Description</label>
-                    <textarea rows={2} required placeholder="Short summary for the grid card…" className={`${inputCls} resize-none`} {...field('description')} />
-                </div>
+                {/* Brief description removed */}
 
                 <div>
-                    <label className={labelCls}>Deep Dive (Long Description)</label>
+                    <label className={labelCls}>Project Details (Long Description)</label>
                     <textarea rows={5} placeholder="Full story: the 'why', the 'how', and technical details…" className={`${inputCls} resize-none`} {...field('long_description')} />
                 </div>
 

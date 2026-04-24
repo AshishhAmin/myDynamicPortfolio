@@ -95,8 +95,12 @@ const initDB = async () => {
         published BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
+
+      ALTER TABLE projects DROP COLUMN IF EXISTS description;
+      ALTER TABLE blogs DROP COLUMN IF EXISTS excerpt;
+      ALTER TABLE blogs DROP COLUMN IF EXISTS cover_image;
     `);
-    console.log('✓ Database tables initialized.');
+    console.log('✓ Database tables initialized and altered.');
   } catch (err) {
     console.error('⚠ DB init failed (server will still run):', err.message);
   } finally {
@@ -133,7 +137,7 @@ app.post('/api/login', (req, res) => {
 // --- POST ROUTE: CREATE PROJECT ---
 app.post('/api/projects', authMiddleware, upload.single('image'), async (req, res) => {
   try {
-    const { title, description, long_description, tech_stack, live_link, github_link } = req.body;
+    const { title, long_description, tech_stack, live_link, github_link } = req.body;
 
     if (!req.file) return res.status(400).json({ error: 'Image file is required' });
 
@@ -157,11 +161,11 @@ app.post('/api/projects', authMiddleware, upload.single('image'), async (req, re
 
     // 5. Insert project data and Cloudinary URL into Neon DB
     const insertQuery = `
-      INSERT INTO projects (title, description, long_description, tech_stack, image_url, live_link, github_link)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO projects (title, long_description, tech_stack, image_url, live_link, github_link)
+      VALUES ($1, $2, $3, $4, $5, $6)
       RETURNING *;
     `;
-    const values = [title, description, long_description, techStackArray, imageUrl, live_link, github_link];
+    const values = [title, long_description, techStackArray, imageUrl, live_link, github_link];
     const dbResult = await pool.query(insertQuery, values);
 
     res.status(201).json({ message: 'Success', project: dbResult.rows[0] });
@@ -211,7 +215,7 @@ app.delete('/api/projects/:id', authMiddleware, async (req, res) => {
 app.put('/api/projects/:id', authMiddleware, upload.single('image'), async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, long_description, tech_stack, live_link, github_link } = req.body;
+    const { title, long_description, tech_stack, live_link, github_link } = req.body;
     const techStackArray = tech_stack ? tech_stack.split(',').map(item => item.trim()) : [];
     let imageUrl = req.body.existing_image_url;
 
@@ -227,8 +231,8 @@ app.put('/api/projects/:id', authMiddleware, upload.single('image'), async (req,
     }
 
     const result = await pool.query(
-      'UPDATE projects SET title=$1, description=$2, long_description=$3, tech_stack=$4, image_url=$5, live_link=$6, github_link=$7 WHERE id=$8 RETURNING *',
-      [title, description, long_description, techStackArray, imageUrl, live_link, github_link, id]
+      'UPDATE projects SET title=$1, long_description=$2, tech_stack=$3, image_url=$4, live_link=$5, github_link=$6 WHERE id=$7 RETURNING *',
+      [title, long_description, techStackArray, imageUrl, live_link, github_link, id]
     );
     res.json(result.rows[0]);
   } catch (error) {
@@ -381,25 +385,13 @@ app.get('/api/blogs/:id', async (req, res) => {
   } catch (error) { res.status(500).json({ error: 'DB Error' }); }
 });
 
-app.post('/api/blogs', authMiddleware, upload.single('cover_image'), async (req, res) => {
+app.post('/api/blogs', authMiddleware, async (req, res) => {
   try {
-    const { title, excerpt, content, published } = req.body;
-    let coverUrl = null;
-
-    if (req.file) {
-      const uploadResult = await new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: 'portfolio_blogs', transformation: [{ width: 1200, crop: 'limit' }] },
-          (error, result) => { if (error) reject(error); else resolve(result); }
-        );
-        stream.end(req.file.buffer);
-      });
-      coverUrl = uploadResult.secure_url;
-    }
+    const { title, content, published } = req.body;
 
     const result = await pool.query(
-      'INSERT INTO blogs (title, excerpt, content, cover_image, published) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [title, excerpt, content, coverUrl, published === 'true']
+      'INSERT INTO blogs (title, content, published) VALUES ($1, $2, $3) RETURNING *',
+      [title, content, published === true || published === 'true']
     );
     res.status(201).json(result.rows[0]);
   } catch (error) {
@@ -408,26 +400,14 @@ app.post('/api/blogs', authMiddleware, upload.single('cover_image'), async (req,
   }
 });
 
-app.put('/api/blogs/:id', authMiddleware, upload.single('cover_image'), async (req, res) => {
+app.put('/api/blogs/:id', authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, excerpt, content, published, existing_cover_image } = req.body;
-    let coverUrl = existing_cover_image;
-
-    if (req.file) {
-      const uploadResult = await new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: 'portfolio_blogs', transformation: [{ width: 1200, crop: 'limit' }] },
-          (error, result) => { if (error) reject(error); else resolve(result); }
-        );
-        stream.end(req.file.buffer);
-      });
-      coverUrl = uploadResult.secure_url;
-    }
+    const { title, content, published } = req.body;
 
     const result = await pool.query(
-      'UPDATE blogs SET title=$1, excerpt=$2, content=$3, cover_image=$4, published=$5 WHERE id=$6 RETURNING *',
-      [title, excerpt, content, coverUrl, published === 'true', id]
+      'UPDATE blogs SET title=$1, content=$2, published=$3 WHERE id=$4 RETURNING *',
+      [title, content, published === true || published === 'true', id]
     );
     res.json(result.rows[0]);
   } catch (error) {

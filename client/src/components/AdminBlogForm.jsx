@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { API_URL } from '../config';
-import { Plus, Pencil, Trash2, Globe, Lock, Code2, Link, Image as ImageIcon, Check, X, UploadCloud } from 'lucide-react';
+import { Plus, Pencil, Trash2, Globe, Lock, Code2, Link, Image as ImageIcon, Check, X, UploadCloud, FileText } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const INITIAL = { title: '', excerpt: '', content: '', published: false, cover_image: '' };
+const INITIAL = { title: '', content: '', published: false };
 
 /* ─── Shared style tokens ─── */
 const inputCls = 'w-full px-3 py-2.5 rounded-xl bg-white border border-[#E4E4E7] text-[#18181B] placeholder-[#A1A1AA] focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400 transition text-sm';
@@ -13,7 +13,6 @@ const saveBtnCls = 'w-full flex items-center justify-center gap-2 bg-[#2563EB] t
 export default function AdminBlogForm() {
     const [blogs, setBlogs] = useState([]);
     const [formData, setFormData] = useState(INITIAL);
-    const [imageFile, setImageFile] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editId, setEditId] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -38,17 +37,11 @@ export default function AdminBlogForm() {
         e.preventDefault();
         setLoading(true);
 
-        const payload = new FormData();
-        payload.append('title', formData.title);
-        payload.append('excerpt', formData.excerpt);
-        payload.append('content', formData.content);
-        payload.append('published', formData.published);
-
-        if (imageFile) {
-            payload.append('cover_image', imageFile);
-        } else if (isEditing && formData.cover_image) {
-            payload.append('existing_cover_image', formData.cover_image);
-        }
+        const payload = JSON.stringify({
+            title: formData.title,
+            content: formData.content,
+            published: formData.published
+        });
 
         const url = isEditing ? `${API_URL}/api/blogs/${editId}` : `${API_URL}/api/blogs`;
         const method = isEditing ? 'PUT' : 'POST';
@@ -57,12 +50,14 @@ export default function AdminBlogForm() {
             const res = await fetch(url, {
                 method,
                 body: payload,
-                headers: { 'x-admin-token': sessionStorage.getItem('adminToken') },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'x-admin-token': sessionStorage.getItem('adminToken') 
+                },
             });
             if (res.ok) {
                 flash(isEditing ? '✅ Post updated!' : '✅ Post published!');
                 setFormData(INITIAL);
-                setImageFile(null);
                 setIsEditing(false);
                 setEditId(null);
                 fetchBlogs();
@@ -82,16 +77,13 @@ export default function AdminBlogForm() {
         setEditId(blog.id);
         setFormData({
             title: blog.title,
-            excerpt: blog.excerpt,
             content: blog.content,
-            published: blog.published,
-            cover_image: blog.cover_image || '',
+            published: blog.published
         });
-        setImageFile(null);
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const cancelEdit = () => { setIsEditing(false); setFormData(INITIAL); setEditId(null); setImageFile(null); };
+    const cancelEdit = () => { setIsEditing(false); setFormData(INITIAL); setEditId(null); };
 
     const handleDelete = async (id) => {
         if (!confirm('Delete this blog post?')) return;
@@ -129,14 +121,6 @@ export default function AdminBlogForm() {
                             className={inputCls} placeholder="e.g. Building a High-Performance API" />
                     </div>
 
-                    {/* Excerpt */}
-                    <div>
-                        <label className={labelCls}>Excerpt (Short Summary)</label>
-                        <textarea required rows={2} value={formData.excerpt}
-                            onChange={e => setFormData({ ...formData, excerpt: e.target.value })}
-                            className={`${inputCls} resize-none`} placeholder="A brief description for the blog list…" />
-                    </div>
-
                     {/* Markdown content */}
                     <div>
                         <div className="flex items-center justify-between mb-1.5">
@@ -169,33 +153,9 @@ export default function AdminBlogForm() {
                             placeholder="Write your post here using Markdown…" />
                     </div>
 
-                    {/* Cover image + Publish toggle */}
+                    {/* Publish toggle */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Cover image */}
-                        <div>
-                            <label className={labelCls}>
-                                Cover Image {isEditing && <span className="normal-case font-normal text-[#A1A1AA]">(blank = keep current)</span>}
-                            </label>
-                            <label className="flex flex-col items-center justify-center w-full h-20 rounded-xl border-2 border-dashed border-[#E4E4E7] bg-[#F4F4F5] cursor-pointer hover:border-blue-300 hover:bg-blue-50 transition-all">
-                                <input type="file" accept="image/*" className="sr-only" onChange={e => e.target.files?.[0] && setImageFile(e.target.files[0])} />
-                                {imageFile ? (
-                                    <span className="text-xs text-[#52525B] font-body px-4 text-center truncate">{imageFile.name}</span>
-                                ) : isEditing && formData.cover_image ? (
-                                    <div className="flex flex-col items-center gap-1">
-                                        <img src={formData.cover_image} alt="cover" className="h-10 object-cover rounded border border-[#E4E4E7]" />
-                                        <span className="text-[10px] text-[#A1A1AA]">Click to replace</span>
-                                    </div>
-                                ) : (
-                                    <>
-                                        <UploadCloud size={20} className="text-[#A1A1AA] mb-1" />
-                                        <span className="text-xs text-[#71717A]">Click to browse</span>
-                                    </>
-                                )}
-                            </label>
-                        </div>
-
-                        {/* Published toggle */}
-                        <div className="flex flex-col justify-end">
+                        <div className="col-span-1 md:col-start-2 flex flex-col justify-end">
                             <label className={labelCls}>Visibility</label>
                             <button type="button"
                                 onClick={() => setFormData({ ...formData, published: !formData.published })}
@@ -235,12 +195,9 @@ export default function AdminBlogForm() {
                                 className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${editId === blog.id ? 'border-blue-300 bg-blue-50' : 'border-[#E4E4E7] bg-[#F4F4F5]'
                                     }`}
                             >
-                                {/* Thumbnail */}
-                                <div className="w-14 h-12 rounded-lg overflow-hidden bg-white border border-[#E4E4E7] shrink-0 flex items-center justify-center">
-                                    {blog.cover_image
-                                        ? <img src={blog.cover_image} alt={blog.title} className="w-full h-full object-cover" />
-                                        : <ImageIcon size={20} className="text-[#A1A1AA]" />
-                                    }
+                                {/* Icon */}
+                                <div className="w-12 h-12 rounded-lg bg-white border border-[#E4E4E7] shrink-0 flex items-center justify-center">
+                                    <FileText size={20} className="text-[#A1A1AA]" />
                                 </div>
 
                                 {/* Meta */}
@@ -252,7 +209,6 @@ export default function AdminBlogForm() {
                                             {blog.published ? 'Published' : 'Draft'}
                                         </span>
                                     </div>
-                                    <p className="text-xs text-[#71717A] line-clamp-1">{blog.excerpt}</p>
                                 </div>
 
                                 {/* Actions */}

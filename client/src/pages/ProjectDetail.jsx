@@ -79,14 +79,12 @@ export default function ProjectDetail() {
                                 {project.title}
                             </h1>
 
-                            <p className="text-lg md:text-xl text-text-muted font-body font-light leading-relaxed border-l-4 border-cta pl-5 py-1 italic mb-10">
-                                {project.description}
-                            </p>
+                            {/* End of headers */}
 
                             {/* Deep dive */}
                             <div className="space-y-4">
                                 <h3 className="flex items-center gap-2 section-label">
-                                    <Code2 size={14} /> The Deep Dive
+                                    <Code2 size={14} /> Summary
                                 </h3>
                                 <div className="text-text-muted font-body leading-relaxed text-base whitespace-pre-wrap">
                                     {project.long_description || 'Detailed technical breakdown coming soon. This project focuses on high-performance execution and scalable architecture.'}

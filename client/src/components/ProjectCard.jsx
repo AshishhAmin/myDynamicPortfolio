@@ -41,9 +41,7 @@ const ProjectCard = ({ project, index }) => (
                 <h3 className="text-base font-bold text-white group-hover:text-shimmer transition-colors mb-1.5">
                     {project.title}
                 </h3>
-                <p className="text-xs text-ink-300 leading-relaxed flex-1 mb-4">
-                    {project.description}
-                </p>
+                <div className="flex-1 mb-4"></div>
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-1.5">

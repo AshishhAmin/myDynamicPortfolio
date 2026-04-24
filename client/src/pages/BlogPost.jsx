@@ -66,7 +66,7 @@ export default function BlogPost() {
                     <div className="flex flex-wrap items-center gap-3 mb-6">
                         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-border-DEFAULT text-text-muted font-mono text-xs uppercase tracking-widest shadow-sm">
                             <Calendar size={12} className="text-cta" />
-                            {new Date(blog.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+                            {new Date(blog.created_at).toLocaleString('en-US', { month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}
                         </span>
                         <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-border-DEFAULT text-text-muted font-mono text-xs uppercase tracking-widest shadow-sm">
                             <Clock size={12} className="text-cta" />
@@ -78,24 +78,10 @@ export default function BlogPost() {
                         {blog.title}
                     </h1>
 
-                    {blog.excerpt && (
-                        <p className="text-lg md:text-xl text-text-muted font-body font-light leading-relaxed border-l-4 border-cta pl-5 py-1 italic">
-                            {blog.excerpt}
-                        </p>
-                    )}
+                    {/* Excerpt removed */}
                 </motion.header>
 
-                {/* Cover image */}
-                {blog.cover_image && (
-                    <motion.div
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ delay: 0.1 }}
-                        className="w-full aspect-[21/9] md:aspect-[2/1] rounded-3xl overflow-hidden mb-12 border border-border-DEFAULT bg-bg-muted shadow-card"
-                    >
-                        <img src={blog.cover_image} alt={blog.title} className="w-full h-full object-cover" />
-                    </motion.div>
-                )}
+                {/* Cover image removed */}
 
                 {/* Markdown Article */}
                 <motion.article

@@ -8,28 +8,24 @@ const placeholderProjects = [
     {
         id: 1,
         title: "Cashflow App",
-        description: "Personal finance tracker with real-time analytics and predictive insights.",
         tech_stack: ["React", "Node.js", "MongoDB", "Tailwind"],
         image_url: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
     },
     {
         id: 2,
         title: "Digital Census Portal",
-        description: "High-scale data collection architecture for national surveys.",
         tech_stack: ["Next.js", "PostgreSQL", "Prisma"],
         image_url: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
     },
     {
         id: 3,
         title: "AGRITECH System",
-        description: "IoT dashboard for monitoring soil moisture and automated irrigation.",
         tech_stack: ["Vue", "Express", "MQTT"],
         image_url: "https://images.unsplash.com/photo-1586771107445-d3ca888129ff?auto=format&fit=crop&w=800&q=80",
     },
     {
         id: 4,
         title: "Neon Cyber Store",
-        description: "E-commerce platform with 3D product visualization.",
         tech_stack: ["React Three Fiber", "Stripe", "Supabase"],
         image_url: "https://images.unsplash.com/photo-1614729939124-032f0b56c9ce?auto=format&fit=crop&w=800&q=80",
     }
@@ -103,9 +99,7 @@ const BentoProjectsGrid = () => {
                                 </motion.div>
                             </div>
 
-                            <p className="text-gray-300 font-mono text-sm mb-6 line-clamp-2">
-                                {project.description}
-                            </p>
+                            <div className="mb-6"></div>
 
                             <div className="flex flex-wrap gap-2 mt-auto">
                                 {(Array.isArray(project.tech_stack) ? project.tech_stack : []).map((tech, i) => (
